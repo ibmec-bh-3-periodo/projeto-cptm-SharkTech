@@ -1,19 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <title>teste</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <title>App CPTM</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
-    <body>
+<body>
+    <header>
+        <div class="icon-button">
+          <img src="assets/img/Frame.png" alt="Usuário">
+        </div>
+        <img src="assets/img/Logo cptm.png" alt="CPTM Logo" class="logo" />
+    </header>
+      
 
-        <header>
-        </header>
-    
-        <footer>
-        </footer>
+    <main>
+    <section class="saldo-card">
+        <p>Saldo:</p>
+        <div class="saldo">
+          <span id="valor-saldo">R$ ●●●●</span>
+          <button class="toggle-saldo" onclick="toggleSaldo()">
+            <img id="icone-saldo" src="assets/img/eye-closed.png" alt="Mostrar saldo" />
+          </button>
+        </div>
+    </section>
+      
+    <p class="boas-vindas">Para onde, Matheus Menezes?</p>
+    <input
+      type="text"
+      id="search"
+      class="campo-pesquisa"
+      placeholder=""
+      oninput="mostrarSugestoes()"
+    />
+    <ul id="sugestoes" class="sugestoes-lista"></ul>
 
-        <script src="assets/js/scripts.js"></script>
-    </body>
+    <div class="mapa">
+      <img src="assets/img/Mapa cptm.png" alt="Mapa do metrô" />
+    </div>
+
+    <div class="icones">
+        <button class="icone-botao">🏠<span>Casa</span></button>
+        <button class="icone-botao">💼<span>Trabalho</span></button>
+        <button class="icone-botao">⭐<span>Favorito</span></button>
+        <button class="icone-botao">⚙️<span>Config</span></button>
+    </div>
+  </main>
+
+  <script src="assets/js/script.js"></script>
+</body>
 </html>
