@@ -1,12 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPTM</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bem-vindo à CPTM</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script src="./assets/js/scripts.js"></script>
+
+  <div class="bg-zoom"></div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2>Bem-vindo à CPTM</h2>
+      <p>Como você gostaria de ser chamado?</p>
+      <form id="nome-form">
+        <input
+          type="text"
+          id="nome"
+          placeholder="Digite seu nome"
+          required
+        />
+        <button type="submit">Continuar</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="conteudo" class="hidden">
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
