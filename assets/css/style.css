@@ -35,7 +35,7 @@
     }
 
     .modal-content {
-        background-color: whitesmoke;
+        background-color: #F5F5F5;
         border-radius: 12px;
         padding: 24px;
         width: 100%;
@@ -51,7 +51,7 @@
     }
 
     .modal-content p {
-        color: #444;
+        color: #211E1E;
         font-size: 14px;
         margin-bottom: 20px;
     }
@@ -59,7 +59,7 @@
     .modal-content input {
         width: 100%;
         padding: 12px;
-        border: 1px solid #ccc;
+        border: 1px solid #d9d9d9;
         border-radius: 8px;
         margin-bottom: 16px;
         font-size: 16px;
@@ -68,7 +68,7 @@
     .modal-content button {
         width: 100%;
         background-color: #e30000;
-        color: #fff;
+        color: #f5f5f5;
         padding: 12px;
         border: none;
         border-radius: 8px;
@@ -82,4 +82,15 @@
         background-color: #a50e24;
     }
 
+    .hidden {
+        display: none;
+    }
+
+    #conteudo {
+        padding: 32px 16px;
+        text-align: center;
+        font-size: 20px;
+        color: #C8102E;
+        font-weight: bold;
+    }
 }
