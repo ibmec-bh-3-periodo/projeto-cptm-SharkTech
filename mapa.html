@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa CPTM</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset geral */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    #map {
+      width: 100vw;
+      height: 100vh;
+
+    }
+
+    /* Melhorar a fonte do popup para mobile */
+    .leaflet-popup-content {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    /* Popup estilizado */
+    .popup-box {
+    font-family: "Inter", sans-serif;
+    padding: 8px;
+    }
+
+    .popup-titulo {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    }
+
+    .popup-linhas {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 6px;
+    }
+
+    .popup-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: bold;
+    }
+
+    .popup-status.red .texto {
+        color: #b30000;
+    }
+
+    .popup-status.green .texto {
+        color: #1a7f3c;
+    }
+
+    .popup-status.orange .texto {
+        color: #ff9800;
+    }
+
+    .bolinha {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    }
+
+    .bolinha.red {
+    background-color: #b30000;
+    }
+
+    .bolinha.orange {
+    background-color: #ff9800;
+    }
+
+    .bolinha.green {
+    background-color: #1a7f3c;
+    }
+
+    .popup-descricao {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #444;
+    text-align: center;
+    line-height: 1.3;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Criar o mapa
+  var map = L.map('map', {
+      crs: L.CRS.Simple,
+      minZoom: 0,
+      maxZoom: 1,
+      dragging: true,
+      maxBoundsViscosity: 1.0,
+      tapTolerance: 30, // tolerância para toque no mobile
+      zoomControl: false // opcional: remove os botões + e -
+  });
+
+  var bounds = [[0,0], [768,1189]]; // altura x largura da imagem
+  var image = L.imageOverlay('./assets/img/cptm-mapa.png', bounds).addTo(map);
+
+  map.fitBounds(bounds);
+  map.setMaxBounds(bounds);
+
+  // Função para determinar a demanda com base no horário atual
+  function obterStatusDemanda() {
+    const hora = new Date().getHours();
+
+    if ((hora >= 6 && hora < 9) || (hora >= 16 && hora < 20)) {
+      return { texto: "Alta demanda", cor: "red"};
+    } else if (hora >= 20 && hora < 22) {
+      return { texto: "Demanda média", cor: "orange"};
+    } else {
+      return { texto: "Baixa demanda", cor: "green"};
+    }
+  }
+
+  // Pega status atual da demanda
+  const demanda = obterStatusDemanda();
+
+  function adicionarEstacao(lat, lng, nome, linhas, descricao) {
+  const demanda = obterStatusDemanda();
+
+  const popupHtml = `
+    <div class="popup-box">
+      <div class="popup-titulo">${nome}</div>
+      <div class="popup-linhas">${linhas}</div>
+      <div class="popup-status ${demanda.cor}">
+        <span class="texto ${demanda.cor}">${demanda.texto}</span>
+        <span class="bolinha ${demanda.cor}"></span>
+      </div>
+      <div class="popup-descricao">${descricao || ""}</div>
+    </div>
+  `;
+
+  const marcador = L.circleMarker([lat, lng], {
+    radius: 10,
+    color: 'transparent',
+    fillColor: 'transparent',
+    fillOpacity: 0
+  }).addTo(map);
+
+  marcador.bindPopup(popupHtml);
+
+  marcador.on('click', function () {
+    marcador.openPopup();
+  });
+}
+
+// 🟢 Exemplo: adicionar estação Luz
+adicionarEstacao(492.97984909542686, 668.1185940428077, "Estação Luz", "Linhas 7 e 11", "<strong>Linha 7:</strong> Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.</br></br><strong>Linha 11:</strong>Nos horários de pico, o intervalo entre trens é de cerca de 4 minutos. Fora do pico, os intervalos variam de 8 a 12 minutos.");
+adicionarEstacao(470.8609972926165, 590.174236014323, "Estação Palmeiras-Barra Funda", "Linhas 7 e 8", "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.")
+adicionarEstacao(470.4378372985614, 562.9244467064316, "Água Branca", "Linhas 7 e 8",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(470.4320095453015, 542.9444781272048, "Lapa", "Linhas 7 e 8",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(495.9404274111214, 517.9483973182256, "Piqueri", "Linha 7",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(511.440859096548, 510.4394702720115, "Pirituba", "Linha 7",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(525.944744265388, 501.4348978824872, "Vila Clarice", "Linha 7",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(540.9535938166343, 494.9301077601284, "Jaraguá", "Linha 7",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+adicionarEstacao(556.4516512322144, 485.4490505167291, "Vila Aurora", "Linha 7",  "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.");
+// adicionarEstacao(  "Perus", "Linha 7");
+// adicionarEstacao(  "Caieiras", "Linha 7");
+// adicionarEstacao(  "Franco da Rocha", "Linha 7");
+// adicionarEstacao(  "Baltazar Fidelis", "Linha 7");
+// adicionarEstacao(  "Francisco Morato", "Linha 7");
+// adicionarEstacao(  "Botujuru", "Linha 7");
+// adicionarEstacao(  "Campo Limpo Paulista", "Linha 7");
+// adicionarEstacao(  "Várzea Paulista", "Linha 7");
+// adicionarEstacao( "Jundiaí", "Linha 7");
+
+  // Ativar modo debug para encontrar coordenadas de outras estações
+  map.on('click', function(e) {
+    alert("Coordenadas: " + e.latlng.lat + ", " + e.latlng.lng);
+  });
+
+</script>
+
+</body>
+</html>
