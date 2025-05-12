@@ -259,8 +259,10 @@
   }).addTo(map);
 
   marcador.on('click', function () {
-  mostrarModal(nome, linhas, descricao, corClasse, demanda);
+    map.panTo([lat, lng], { animate: true });
+    mostrarModal(nome, linhas, descricao, corClasse, demanda);
   });
+
 }
 
 const modal = document.getElementById("estacaoModal");
