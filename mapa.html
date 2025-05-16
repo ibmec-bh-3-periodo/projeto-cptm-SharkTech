@@ -40,15 +40,39 @@
     }
 
     .popup-titulo {
+    position: relative;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 4px;
-    color: whitesmoke;
-    text-align: center;
+    color: #222;
+    text-align: left;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 12px;
     margin-bottom: 20px;
     }
+
+    .popup-titulo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background-color: currentColor;
+    border-radius: 2px;
+  }
+
+  /* .popup-titulo::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background-color: currentColor;
+    border-radius: 2px;
+  } */
 
     .popup-linhas {
     font-size: 16px;
@@ -111,28 +135,29 @@
     }
 
     .linha-vermelha  { 
-        background-color: #BF2A61; 
-        border-radius: 10px;
+        color: #BF2A61;
+        border-radius: 8px;
+        
     }
     .linha-diamante    { 
-      background-color: #8E8D81;
-      border-radius: 10px; 
+      color: #8E8D81;
+      border-radius: 8px; 
     }
     .linha-esmeralda      { 
-      background-color: #038C8C;
-      border-radius: 10px;
+      color: #038C8C;
+      border-radius: 8px;
      }
     .linha-turquesa   { 
-      background-color: #0C80BB;
-      border-radius: 10px;
+      color: #0C80BB;
+      border-radius: 8px;
      }
     .linha-coral     { 
-      background-color: #F26B5E;
-      border-radius: 10px;
+      color: #F26B5E;
+      border-radius: 8px;
      }
     .linha-safira    { 
-      background-color: #222E73;
-      border-radius: 10px;
+      color: #222E73;
+      border-radius: 8px;
      }
    
 
@@ -143,7 +168,7 @@
         width: 0;
         width: 100%;
         max-width: 80vh;
-        background-color: #fff;
+        background-color: #f5f5f5;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -220,7 +245,7 @@
     if ((hora >= 6 && hora < 9) || (hora >= 16 && hora < 20)) {
       return { texto: "Alta demanda", cor: "red"};
     } else if (hora >= 20 && hora < 22) {
-      return { texto: "Demanda média", cor: "orange"};
+      return { texto: "Média demanda", cor: "orange"};
     } else {
       return { texto: "Baixa demanda", cor: "green"};
     }
@@ -347,8 +372,50 @@ adicionarEstacao( 637.5, 414.5, "Botujuru", "Linha 7 - Rubi", "Nos horários de 
 adicionarEstacao( 651.5, 405, "Campo Limpo Paulista", "Linha 7 - Rubi", "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.","linha-vermelha");
 adicionarEstacao( 666.0028084370949, 394.5, "Várzea Paulista", "Linha 7 - Rubi", "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.","linha-vermelha");
 adicionarEstacao(  682.5, 383.5, "Jundiaí", "Linha 7 - Rubi", "Nos horários de pico, os intervalos entre os trens são mais curtos, variando de 4 a 6 minutos. Fora do horário de pico, os intervalos podem ser de até 15 minutos.","linha-vermelha");
+adicionarEstacao(  472, 609.5, "Júlio Prestes", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 474, 589.5, "Palmeiras-Barra Funda", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 471.5, 551.5 , "Lapa",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 472.5, 513 , "Domingos de Moraes",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 473.5, 456 , "Imperatriz Leopoldina",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 477, 418.5 , "Presidente Altino",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 484.5, 407.5 , "Osasco",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489.5, 368 , "Comandante Sampaio", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao(  489.5, 341 , "Quitaúna",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489, 316.5 , "General Miguel Costa", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489, 291.5, "Carapicuíba",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489, 267 , "Santa Terezinha",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489.5, 242 , "Antonio João",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 490, 220.5 , "Barueri",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 490, 195.5 , "Jardim Belval",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 491, 174.5, "Jardim Silveira",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489.5, 152 , "Jandira",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489.5, 130 , "Sagrado Coração", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 478, 94.5, "Itapevi",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 489.5, 107, "Engenheiro Cardoso", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 477, 74, "Santa Rita", "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 477, 50, "Amador Bueno",  "Linha 8 - Diamante", "Nos horários de pico, os trens circulam a cada 6 minutos, enquanto fora do pico, o intervalo pode chegar a 10 minutos.", "linha-diamante");
+adicionarEstacao( 477.5, 398, "Osasco", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 469, 408, "Presidente Altino", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 443, 437.5 , "Ceasa", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 418.5, 438.5, "Villa Lobos–Jaguaré", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 385.5, 438, "Cidade Universitária", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 360, 438.5, "Pinheiros", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 359.5, 452.5, "Pinheiros", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 341.5, 438, "Hebraica-Rebouças", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 321.5, 438, "Cidade Jardim", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 301, 437.5, "Vila Olímpia", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 282.5, 437, "Berrini", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 262.5, 439, "Morumbi", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 243.5, 437, "Granja Julieta", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 223.5, 437.5, "Santo Amaro", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao(  216, 428, "Santo Amaro", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao(  189.5, 437.5, "Socorro", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 170, 437.5, "Jurubatuba", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 152.5, 438.5 , "Autódromo", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 135, 438.5, "Primavera-Interlagos", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
+adicionarEstacao( 118, 438, "Grajaú", "Linha 9", "Uma das linhas mais movimentadas, com intervalos de 4 a 6 minutos durante o pico e até 10 minutos nos outros horários.", "linha-esmeralda");
 
-  // Ativar modo debug para encontrar coordenadas de outras estações
+ 
   // map.on('click', function(e) {
   //   alert("Coordenadas: " + e.latlng.lat + ", " + e.latlng.lng);
   // });
