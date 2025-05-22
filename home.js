@@ -1,5 +1,5 @@
-    let novoElemento = document.createElement("p");
+    let boasVindas = document.getElementsByClassName("boas-vindas") [0];
     let nomeArmazenado = localStorage.getItem("nomePessoa")
 
-    novoElemento.innerText = `Olá, ${nomeArmazenado}!`
-    document.body.appendChild(novoElemento);
+    novoElemento.innerText = `Para onde, ${nomeArmazenado}?`
+    //document.body.appendChild(novoElemento);
