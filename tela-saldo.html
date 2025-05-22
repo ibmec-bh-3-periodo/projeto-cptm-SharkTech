@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minha Conta - CPTM</title>
+  <link rel="stylesheet" href="./assets/css/tela-saldo.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="top-row">
+      <a href="home.html"><button class="back-button">←</button></a>
+      <span class="title">CPTM</span>
+      <img src="./assets/img/Logo cptm.png" alt="Logo CPTM" class="logo">
+    </div>
+    <div class="minha-conta">
+        <h3>Minha Conta</h3>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="saldo-box">
+      <p class="sub">Saldo atual</p>
+      <div class="saldo">
+        <span id="valor-saldo">R$ 14,70</span>
+        <button id="toggle-saldo">
+          <img id="icone-olho" src="./assets/img/eye-off.svg">
+        </button>
+      </div>
+      <button class="adicionar-saldo">ADICIONAR SALDO</button>
+    </section>
+
+    <section class="acoes">
+      <div class="card">
+        <div class="info">
+          <h3>Histórico</h3>
+          <p>Acompanhe seus gastos de forma fácil e rápida.</p>
+        </div>
+        <img src="./assets/img/historico-icon.png" class="icon" alt="Ícone Histórico">
+      </div>
+
+      <div class="card">
+        <div class="info">
+          <h3>Gerar Bilhetes</h3>
+          <p>Escolha o trajeto, pague pelo app e embarque com agilidade.</p>
+        </div>
+        <img src="./assets/img/bilhete-icon.png" class="icon" alt="Ícone Bilhete">
+      </div>
+
+      <div class="card">
+        <div class="info">
+          <h3>Carteira</h3>
+          <p>Veja um bilhete já emitido disponível para utilização.</p>
+        </div>
+        <img src="./assets/img/carteira-icon.png" class="icon" alt="Ícone Carteira">
+      </div>
+    </section>
+
+    <button class="ajuda">
+      <img src="./assets/img/help-icon.png" alt="Ajuda" class="help-icon"> CENTRAL DE AJUDA
+    </button>
+  </main>
+
+  <script>
+    const valorSaldo = document.getElementById('valor-saldo');
+    const iconeOlho = document.getElementById('icone-olho');
+    const toggleBtn = document.getElementById('toggle-saldo');
+
+    let saldoVisivel = true;
+
+    toggleBtn.addEventListener('click', () => {
+      saldoVisivel = !saldoVisivel;
+      valorSaldo.textContent = saldoVisivel ? 'R$ 14,70' : '••••';
+      iconeOlho.src = saldoVisivel ? './assets/img/eye-off.svg' : './assets/img/eye.svg';
+    });
+  </script>
+</body>
+</html>
