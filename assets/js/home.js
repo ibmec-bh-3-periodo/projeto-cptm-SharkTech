@@ -48,4 +48,4 @@ function mostrarSugestoes() {
 let boasVindas = document.getElementsByClassName("boas-vindas")[0];
 let nomeArmazenado = localStorage.getItem("nomePessoa")
 
-boasVindas.innerText = `para onde, ${nomeArmazenado}?`
+boasVindas.innerText = `Para onde, ${nomeArmazenado}?`
