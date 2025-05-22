@@ -12,7 +12,7 @@
     }
 
     .bg-zoom {
-        background-image: url('/assets/img/linhas.jpg');
+        background-image: url('assets/img/linhas.jpg');
         background-size: 175%;
         background-position: center;
         position: absolute;
