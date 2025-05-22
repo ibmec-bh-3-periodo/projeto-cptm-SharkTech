@@ -24,7 +24,7 @@
           placeholder="Digite seu nome"
           required
         />
-        <button type="submit">Continuar</button>
+        <button id="botao" type="submit">Continuar</button>
       </form>
     </div>
 
@@ -34,21 +34,6 @@
       <p style="color: #f5f5f5; font-weight: bold;">Carregando...</p>
     </div>
   </div>
-
-  <script>
-    document.getElementById("nome-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const nome = document.getElementById("nome").value.trim();
-      if (!nome) return;
-      document.querySelector(".modal-content").classList.add("hidden");
-      document.getElementById("loading").classList.remove("hidden");
-
-
-      setTimeout(() => {
-        window.location.href = "home.html"; 
-      }, 2000);
-    });
-  </script>
+  <script src="./login.js"></script>
 </body>
 </html>
