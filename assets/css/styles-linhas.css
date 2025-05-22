@@ -1,0 +1,94 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    background-color: #E30000;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 16%;
+    color: #FFFFFF;
+    position: relative;
+}
+
+h1{
+    all: unset;
+    font-size: 24px;
+    position: absolute;
+    top: 16%;
+}
+
+h2{
+    all: unset;
+    font-size: 20px;
+    position: absolute;
+    bottom: 16%;
+}
+
+main{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #E0E0E0;
+    height: 84%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+}
+
+.content{
+    position: absolute;
+    top: 8%;
+    height:84%;
+    width: 76%;
+    gap: 4%;
+    display: grid;
+    place-items: center;
+    grid-template-rows: repeat(6,1fr);
+    grid-template-columns: 1fr;
+}
+
+.item{
+    color: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.item:nth-child(1){
+    background-color: #E30000;
+}
+.item:nth-child(2){
+    background-color: #A8034F;
+}
+.item:nth-child(3){
+    background-color: #00829B;
+}
+.item:nth-child(4){
+    background-color: #F55F1A;
+}
+.item:nth-child(5){
+    background-color: #1C146B;
+}
+.item:nth-child(6){
+    background-color: #00B052;
+}
+
+.item__text{
+    margin-left: 8%;
+}
