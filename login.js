@@ -1,7 +1,7 @@
 const botao = document.getElementById("botao");
 
-botao.addEventListener("click", function (event) {
-    event.preventDefault();
+botao.addEventListener("click", function () {
+    //event.preventDefault();
     let nome = document.getElementById('nome').value;
     localStorage.setItem('nomePessoa', nome);
     //window.location.href = 'home.html'
