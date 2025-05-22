@@ -45,3 +45,7 @@ function mostrarSugestoes() {
   });
 }
 
+let boasVindas = document.getElementsByClassName("boas-vindas")[0];
+let nomeArmazenado = localStorage.getItem("nomePessoa")
+
+novoElemento.innerText = `para onde, ${nomeArmazenado}?`

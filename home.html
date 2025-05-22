@@ -3,54 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <title>CPTM – Home</title>
+  <link rel="stylesheet" href="assets/css/style-home.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <title>App CPTM</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-    <header>
-        <div class="icon-button">
-          <img src="assets/img/Frame.png" alt="Usuário">
-        </div>
-        <img src="assets/img/Logo cptm.png" alt="CPTM Logo" class="logo" />
-    </header>
-      
 
-    <main>
-    <section class="saldo-card">
-        <p>Saldo:</p>
-        <div class="saldo">
-          <span id="valor-saldo">R$ ●●●●</span>
-          <button class="toggle-saldo" onclick="toggleSaldo()">
-            <img id="icone-saldo" src="assets/img/eye-closed.png" alt="Mostrar saldo" />
-          </button>
-        </div>
-    </section>
-      
-    <p class="boas-vindas">Para onde, Matheus Menezes?</p>
-    <input
-      type="text"
-      id="search"
-      class="campo-pesquisa"
-      placeholder=""
-      oninput="mostrarSugestoes()"
-    />
-    <ul id="sugestoes" class="sugestoes-lista"></ul>
+  <div class="header">
+    <div class="top-row">
+      <div class="icon-button">
+        <img src="assets/img/Frame.png" alt="Ícone de usuário" />
+      </div>
+      <h1 class="title">CPTM</h1>
+      <img src="assets/img/Logo cptm.png" class="logo" alt="Logo da CPTM" />
+    </div>
+  </div>
+
+  <div class="container">
+    <p class="boas-vindas"></p>
 
     <div class="mapa">
       <img src="assets/img/Mapa cptm.png" alt="Mapa do metrô" />
     </div>
 
-    <div class="icones">
-        <button class="icone-botao">🏠<span>Casa</span></button>
-        <button class="icone-botao">💼<span>Trabalho</span></button>
-        <button class="icone-botao">⭐<span>Favorito</span></button>
-        <button class="icone-botao">⚙️<span>Config</span></button>
+    <div class="carousel">
+      <div class="carousel-inner">
+        <button class="icone-botao">
+          <img src="assets/img/directions_subway.png" alt="Linhas" />
+          <span>Linhas</span>
+        </button>
+        <button class="icone-botao">
+          <img src="assets/img/favorite.png" alt="Favoritos" />
+          <span>Favoritos</span>
+        </button>
+        <button class="icone-botao">
+          <img src="assets/img/qr_code.png" alt="QR Code" />
+          <span>QR Code</span>
+        </button>
+        <button class="icone-botao">
+          <img src="assets/img/chat (2).png" alt="Fale conosco" />
+          <span>Fale<br>conosco</span>
+        </button>
+      </div>
     </div>
-  </main>
+  </div>
 
-  <script src="assets/js/script.js"></script>
+  <section class="saldo-card">
+    <p>Saldo:</p>
+    <div class="saldo">
+      <span class="valor-saldo">R$ 14,70</span>
+      <button class="toggle-saldo">
+        <img class="icone-saldo" src="assets/img/eye-off.svg" alt="Mostrar saldo" />
+      </button>
+    </div>
+  </section>
+
+<script src="assets/js/home.js"></script>
 </body>
 </html>
