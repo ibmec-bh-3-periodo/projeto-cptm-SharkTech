@@ -204,6 +204,96 @@
     touch-action: none;
     }
 
+    #busca-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1500;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      font-family: "Inter", sans-serif;
+    }
+
+    #botao-lupa {
+      background-color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+
+    #campo-busca {
+    display: none;
+    width: 200px;
+    padding: 10px 12px;
+    /* border: 1px solid #ccc; */
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    /* box-shadow: 0 4px 0px #E30000; */
+    transition: all 0.3s ease;
+  }
+
+  #campo-busca:focus {
+  outline: none;
+  box-shadow: 0 2px 0px #ccc;
+}
+
+  #sugestoes-busca {
+  position: absolute;
+  top: 50px;
+  left: 55px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1500;
+  width: 220px;
+  font-family: "Inter", sans-serif;
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.sugestao-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.sugestao-item:hover {
+  background-color: #f0f0f0;
+}
+
+  #botao-fechar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1600;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#botao-fechar img {
+  width: 20px;
+  height: 20px;
+}
+
   </style>
 </head>
 
@@ -214,6 +304,16 @@
     <div class="modal-content" id="modalContent">
         <div class="modal-drag-handle" id="dragHandle"></div>
     </div>
+</div>
+<div id="busca-container">
+  <div id="botao-lupa" role="button" tabindex="0">
+    <img src="./assets/img/lupa.png" alt="Ícone de busca">
+  </div>
+  <input type="text" id="campo-busca" placeholder="Buscar estação..." />
+  <div id="sugestoes-busca"></div>
+</div>
+<div id="botao-fechar" role="button" tabindex="0">
+  <img src="./assets/img/fechar.png" alt="Fechar mapa">
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -250,7 +350,7 @@
 
   // Pega status atual da demanda
   const demanda = obterStatusDemanda();
-
+  const estacoesMap = {};
   function adicionarEstacao(lat, lng, nome, linhas, descricao, corClasse) {
   const demanda = obterStatusDemanda();
 
@@ -265,7 +365,7 @@
       <div class="popup-descricao">${descricao || ""}</div>
     </div>
   `;
-
+  
   const marcador = L.circleMarker([lat, lng], {
     radius: 10,
     color: 'transparent',
@@ -277,6 +377,9 @@
     map.panTo([lat, lng], { animate: true });
     mostrarModal(nome, linhas, descricao, corClasse, demanda);
   });
+
+  // Armazena para a lupa funcionar
+  estacoesMap[nome.toLowerCase()] = { lat, lng, nome, linhas, descricao, corClasse, demanda };
 
 }
 
@@ -422,6 +525,74 @@ adicionarEstacao(471.5, 1021, "Acararé", "Linha 12 - Safira","Os intervalos var
 adicionarEstacao(468.9114065752779, 795, "Eng. Goulart", "Linha 13 - Jade", "Essa linha tem intervalos maiores, de 20 a 30 minutos, uma vez que atende uma área mais específica, conectando a capital ao Aeroporto Internacional de Guarulhos.", "linha-jade")
 adicionarEstacao(652, 972.5, "Guarulhos • Cecap", "Linha 13 - Jade", "Essa linha tem intervalos maiores, de 20 a 30 minutos, uma vez que atende uma área mais específica, conectando a capital ao Aeroporto Internacional de Guarulhos.", "linha-jade")
 adicionarEstacao(687, 973, "Aeroporto • Guarulhos", "Linha 13 - Jade", "Essa linha tem intervalos maiores, de 20 a 30 minutos, uma vez que atende uma área mais específica, conectando a capital ao Aeroporto Internacional de Guarulhos.", "linha-jade")
+
+
+// Normaliza acentos e maiúsculas
+function normalizarTexto(texto) {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+const lupaBtn = document.getElementById("botao-lupa");
+const campoBusca = document.getElementById("campo-busca");
+const sugestoesDiv = document.getElementById("sugestoes-busca");
+
+lupaBtn.addEventListener("click", () => {
+  campoBusca.style.display = campoBusca.style.display === "block" ? "none" : "block";
+  campoBusca.focus();
+});
+
+campoBusca.addEventListener("input", () => {
+  const termo = normalizarTexto(campoBusca.value.trim());
+  sugestoesDiv.innerHTML = "";
+
+  if (termo === "") {
+    sugestoesDiv.style.display = "none";
+    return;
+  }
+
+  const resultados = Object.keys(estacoesMap).filter(nome =>
+    normalizarTexto(nome).includes(termo)
+  );
+
+  if (resultados.length === 0) {
+    sugestoesDiv.style.display = "none";
+    return;
+  }
+
+  resultados.forEach(nome => {
+    const item = document.createElement("div");
+    item.className = "sugestao-item";
+    item.textContent = estacoesMap[nome].nome;
+
+    item.addEventListener("click", () => {
+      const estacao = estacoesMap[nome];
+      map.panTo([estacao.lat, estacao.lng], { animate: true });
+      mostrarModal(estacao.nome, estacao.linhas, estacao.descricao, estacao.corClasse, estacao.demanda);
+      campoBusca.value = "";
+      sugestoesDiv.style.display = "none";
+      campoBusca.style.display = "none";
+    });
+
+    sugestoesDiv.appendChild(item);
+  });
+
+  sugestoesDiv.style.display = "block";
+});
+
+campoBusca.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    sugestoesDiv.style.display = "none";
+  }
+});
+
+document.addEventListener("click", function (e) {
+  if (!campoBusca.contains(e.target) && !sugestoesDiv.contains(e.target) && e.target !== lupaBtn) {
+    sugestoesDiv.style.display = "none";
+  }
+});
 
   // map.on('click', function(e) {
   //   alert("Coordenadas: " + e.latlng.lat + ", " + e.latlng.lng);
