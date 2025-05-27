@@ -1,16 +1,24 @@
+// Mostrar/ocultar saldo
 const valorSaldo = document.getElementById('valor-saldo');
 const iconeOlho = document.getElementById('icone-olho');
 const toggleBtn = document.getElementById('toggle-saldo');
+const linkSaldo = document.getElementById('link-saldo');
 
 let saldoVisivel = true;
 
-toggleBtn.addEventListener('click', () => {
+toggleBtn.addEventListener('click', (event) => {
+  event.stopPropagation(); // impede o clique de subir para o <section>
   saldoVisivel = !saldoVisivel;
   valorSaldo.textContent = saldoVisivel ? 'R$ 14,70' : '••••';
-  iconeOlho.src = saldoVisivel ? '../assets/img/eye-off.svg' : '../assets/img/eye.svg';
+  iconeOlho.src = saldoVisivel ? 'assets/img/eye-off.svg' : 'assets/img/eye.svg';
 });
 
-let boasVindas = document.getElementsByClassName("boas-vindas")[0];
-let nomeArmazenado = localStorage.getItem("nomePessoa")
+// Tornar a section inteira um link
+linkSaldo.addEventListener('click', () => {
+  window.location.href = "tela-saldo.html";
+});
 
-boasVindas.innerText = `Para onde, ${nomeArmazenado}?`
+// Mensagem de boas-vindas
+let boasVindas = document.getElementsByClassName("boas-vindas")[0];
+let nomeArmazenado = localStorage.getItem("nomePessoa");
+boasVindas.innerText = `Para onde, ${nomeArmazenado}?`;
