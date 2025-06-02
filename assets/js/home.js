@@ -22,3 +22,15 @@ linkSaldo.addEventListener('click', () => {
 let boasVindas = document.getElementsByClassName("boas-vindas")[0];
 let nomeArmazenado = localStorage.getItem("nomePessoa");
 boasVindas.innerText = `Para onde, ${nomeArmazenado}?`;
+
+const mapa = document.getElementById("mapaHome");
+const transicao = document.getElementById("mapa-transicao");
+
+mapa.addEventListener("click", () => {
+  transicao.style.opacity = "1";
+  transicao.style.transform = "scale(1)";
+  
+  setTimeout(() => {
+    window.location.href = "mapa.html";
+  }, 850);
+});

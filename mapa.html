@@ -259,7 +259,7 @@
   top: 50px;
   left: 55px;
   background: white;
-  border: 1px solid #d9d9d9;
+  border: 1px solid;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1500;
@@ -298,6 +298,22 @@
 #botao-fechar img {
   width: 20px;
   height: 20px;
+}
+
+/* Animação de zoom-out */
+@keyframes zoomOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.saindo {
+  animation: zoomOut 0.4s ease forwards;
 }
 
   </style>
@@ -610,6 +626,16 @@ document.addEventListener("click", function (e) {
   //   alert("Coordenadas: " + e.latlng.lat + ", " + e.latlng.lng);
   // });
 
+  const botaoFechar = document.getElementById("botao-fechar");
+
+botaoFechar.addEventListener("click", () => {
+  const body = document.body;
+
+  body.classList.add("saindo"); // aplica a animação
+  setTimeout(() => {
+    window.location.href = "home.html"; // redireciona após a animação
+  }, 400); // igual ao tempo do CSS
+});
 </script>
 
 </body>
