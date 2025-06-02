@@ -63,12 +63,16 @@ main {
     justify-content: center;
 }
   
-.icon-button img {
-    width: 20px;
+.profile {
+    width: 36px;
 }
-  
+
+.CPTM-escrito {
+    height: 36px;
+}
+
 .logo {
-    height: 24px;
+    height: 36px;
 }
 
 .title {
