@@ -97,18 +97,18 @@ main{
 }
 
 .content .item:nth-child(2) .line-color {
-    background-color: #92278F; /* Ruby */
+    background-color: #8c2b61; /* Ruby */
 }
 .content .item:nth-child(3) .line-color {
-    background-color: #00B5CC; /* Turquesa */
+    background-color: #458797; /* Turquesa */
 }
 .content .item:nth-child(4) .line-color {
-    background-color: #F37021; /* Coral */
+    background-color: #bf4124; /* Coral */
 }
 .content .item:nth-child(5) .line-color {
-    background-color: #0072BC; /* Safira */
+    background-color: #1c146b; /* Safira */
 }
 .content .item:nth-child(6) .line-color {
-    background-color: #00985F; /* Jade */
+    background-color: #038c3e; /* Jade */
 }
 
