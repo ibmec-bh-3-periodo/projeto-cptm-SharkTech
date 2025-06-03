@@ -93,7 +93,7 @@ main{
 
 .item {
     position: relative;
-    color: #121212;
+    color: black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     height: 100%;
     width: 100%;
@@ -103,6 +103,10 @@ main{
     background-color: #f5f5f5;
     padding: 10px;
     overflow: hidden;
+}
+
+.item p {
+    margin-left: 10px;
 }
 
 .line-color {
