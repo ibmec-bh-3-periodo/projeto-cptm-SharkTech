@@ -180,6 +180,7 @@ main {
     display: flex;
     gap: 12px;
     width: max-content;
+    padding-inline: 12px;
 }
   
 .icone-botao {
