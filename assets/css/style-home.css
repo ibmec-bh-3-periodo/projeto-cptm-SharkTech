@@ -173,8 +173,14 @@ main {
     width: 100%;
     margin-top: 0px;
     margin-bottom: 30px;
-    
+    -ms-overflow-style: none;
+    scrollbar-width: none;     
 }
+
+    .carousel::-webkit-scrollbar {
+    display: none;             
+}
+
 
 .carousel-inner {
     display: flex;
