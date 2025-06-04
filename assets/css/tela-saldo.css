@@ -191,6 +191,8 @@
   font-weight: 500;
   cursor: pointer;
   width: 314px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .help-icon {
