@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-touch-callout: none;
 }
   
 body, html {
@@ -193,6 +194,10 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    color: inherit;
+    -webkit-user-select: none;
+    user-select: none;
 }
   
 .icone-botao img {
@@ -203,8 +208,6 @@ main {
 .icone-botao span {
     font-size: 12px;
     text-align: center;
-    color: inherit;
-    text-decoration: none;
 }
 
 
