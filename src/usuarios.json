@@ -1,0 +1,20 @@
+[
+    {
+        "username": "Henrique",
+        "email": "henrique@email.com",
+        "password": "hashed_password_123",
+        "saldo": 150.75,
+        "historico": [
+            {
+                "data": "2024-10-01T10:15:30Z",
+                "descricao": "Recarga de saldo",
+                "valor": 100.00
+            },
+            {
+                "data": "2024-10-05T14:20:00Z",
+                "descricao": "Compra de bilhete",
+                "valor": -4.50
+            }
+        ]
+    }
+]
