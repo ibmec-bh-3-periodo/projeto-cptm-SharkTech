@@ -656,6 +656,27 @@ botaoFechar.addEventListener("click", () => {
     window.location.href = "home.html"; // redireciona após a animação
   }, 400); // igual ao tempo do CSS
 });
+
+async function buscarTrajeto(origem, destino) {
+  try {
+    const resposta = await fetch(`http://localhost:5001/trajeto?origem=${origem}&destino=${destino}`);
+    const dados = await resposta.json();
+    console.log("Trajeto encontrado:", dados);
+
+    // 🔹 Aqui você pode desenhar no mapa a linha entre as coordenadas das duas estações:
+    const latlngs = [
+      [dados.origem.lat, dados.origem.lng],
+      [dados.destino.lat, dados.destino.lng]
+    ];
+
+    L.polyline(latlngs, { color: "blue", weight: 4 }).addTo(map);
+  } catch (erro) {
+    console.error("Erro ao buscar trajeto:", erro);
+  }
+}
+
+// Exemplo de uso:
+buscarTrajeto("Brás", "Luz");
 </script>
 
 </body>
