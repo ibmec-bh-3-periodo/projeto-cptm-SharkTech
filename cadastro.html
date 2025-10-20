@@ -16,24 +16,28 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <h2>Bem-vindo à CPTM</h2>
-      <p>Login</p>
-      <form id="email-form">
+      <p>Cadastro</p>
+      <form id="nome-form">
         <input
-          type="text"
-          id="email"
-          placeholder="Insira seu e- mail"
-          required
+            type="text"
+            id="nome"
+            placeholder="Nome"
+            required
         />
-        <form id="senha-form">
-          <input
+        <input
+            type="text"
+            id="email"
+            placeholder="E-mail"
+            required
+        />
+    <form id="senha-form">
+        <input
             type="text"
             id="senha"
-            placeholder="Insira sua senha"
+            placeholder="Crie sua senha"
             required
           />
         <button id="botao" type="submit">Continuar</button>
-
-        <button id="cadastro" onclick="window.location.href='cadastro.html'">Não tem uma conta? Cadastre-se</button>
       </form>
     </div>
     <div id="loading" class="hidden" style="text-align: center; margin-top: 20px;">
