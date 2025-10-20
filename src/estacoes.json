@@ -1,30 +1,30 @@
 [
-    {
-      "id": "bras",
-      "nome": "Brás",
-      "lat": 414,
-      "lng": 680,
-      "vizinhos": ["luz", "juventus_mooca"]
-    },
-    {
-      "id": "luz",
-      "nome": "Luz",
-      "lat": 454,
-      "lng": 606,
-      "vizinhos": ["bras", "palmeiras_barra_funda"]
-    },
-    {
-      "id": "palmeiras_barra_funda",
-      "nome": "Palmeiras • Barra Funda",
-      "lat": 454,
-      "lng": 510,
-      "vizinhos": ["luz"]
-    },
-    {
-      "id": "juventus_mooca",
-      "nome": "Juventus • Mooca",
-      "lat": 370,
-      "lng": 742,
-      "vizinhos": ["bras"]
-    }
-  ]
+  {
+    "id": "bras",
+    "nome": "Brás",
+    "lat": 414,
+    "lng": 680,
+    "vizinhos": ["luz", "mooca"]
+  },
+  {
+    "id": "luz",
+    "nome": "Luz",
+    "lat": 454,
+    "lng": 606,
+    "vizinhos": ["bras", "barrafunda"]
+  },
+  {
+    "id": "barrafunda",
+    "nome": "Palmeiras • Barra Funda",
+    "lat": 454,
+    "lng": 510,
+    "vizinhos": ["luz"]
+  },
+  {
+    "id": "mooca",
+    "nome": "Juventus • Mooca",
+    "lat": 370,
+    "lng": 742,
+    "vizinhos": ["bras"]
+  }
+]

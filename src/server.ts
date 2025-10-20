@@ -15,7 +15,10 @@ interface Estacao {
 }
 
 // Carrega o arquivo JSON
-const estacoes: Estacao[] = JSON.parse(fs.readFileSync("./estacoes.json", "utf-8"));
+import path from "path";
+
+const estacoesPath = path.join(__dirname, "estacoes.json");
+const estacoes: Estacao[] = JSON.parse(fs.readFileSync(estacoesPath, "utf-8"));
 
 // Função BFS para achar caminho mais curto entre origem e destino
 function buscarCaminho(origemId: string, destinoId: string): Estacao[] | null {
