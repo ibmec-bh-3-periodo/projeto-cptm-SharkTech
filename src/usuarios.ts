@@ -1,21 +1,23 @@
-interface HistoricoItem {
-  data: string;          
-  descricao: string;     
-  valor: number;         
+// usuarios.ts
+
+export interface HistoricoItem {
+  data: string;        // Data da transação
+  descricao: string;   // Texto explicando o que aconteceu
+  valor: number;       // Valor positivo (crédito) ou negativo (débito)
 }
 
-interface Favorito {
-  idEstacao: number;     
-  nome: string;          
-  linha: string;         
+export interface Favorito {
+  idEstacao: number;   // ID da estação favorita
+  nome: string;        // Nome da estação
+  linha: string;       // Linha correspondente
 }
 
-interface Usuario {
-  id: number;            
-  username: string;      
-  email: string;         
-  password: string;      
-  saldo: number;       
-  historico: HistoricoItem[];  
-  favoritos: Favorito[];       
+export interface Usuario {
+  id: number;                  // ID do usuário
+  username: string;            // Nome de login
+  email: string;               // E-mail do usuário
+  password: string;            // Senha (ou hash)
+  saldo: number;               // Saldo atual
+  historico: HistoricoItem[];  // Transações
+  favoritos: Favorito[];       // Estações favoritas
 }
