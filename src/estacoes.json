@@ -1,19 +1,5 @@
 [
   {
-    "id": "bras",
-    "nome": "Brás",
-    "lat": 414,
-    "lng": 680,
-    "vizinhos": ["luz", "mooca"]
-  },
-  {
-    "id": "luz",
-    "nome": "Luz",
-    "lat": 454,
-    "lng": 606,
-    "vizinhos": ["bras", "barrafunda"]
-  },
-  {
     "id": "barrafunda",
     "nome": "Palmeiras • Barra Funda",
     "lat": 454,
@@ -21,10 +7,101 @@
     "vizinhos": ["luz"]
   },
   {
+    "id": "luz",
+    "nome": "Luz",
+    "lat": 454,
+    "lng": 606,
+    "vizinhos": ["barrafunda", "bras"]
+  },
+  {
+    "id": "bras",
+    "nome": "Brás",
+    "lat": 414,
+    "lng": 680,
+    "vizinhos": ["luz", "mooca", "tamanduatuei"]
+  },
+  {
     "id": "mooca",
     "nome": "Juventus • Mooca",
     "lat": 370,
     "lng": 742,
-    "vizinhos": ["bras"]
+    "vizinhos": ["bras", "ipiranga"]
+  },
+  {
+    "id": "ipiranga",
+    "nome": "Ipiranga",
+    "lat": 339,
+    "lng": 780,
+    "vizinhos": ["mooca", "tamanduatuei"]
+  },
+  {
+    "id": "tamanduatuei",
+    "nome": "Tamanduateí",
+    "lat": 298,
+    "lng": 829,
+    "vizinhos": ["ipiranga", "sancaetano", "bras"]
+  },
+  {
+    "id": "sancaetano",
+    "nome": "São Caetano do Sul",
+    "lat": 280,
+    "lng": 855,
+    "vizinhos": ["tamanduatuei", "uting"]
+  },
+  {
+    "id": "uting",
+    "nome": "Utinga",
+    "lat": 261,
+    "lng": 877,
+    "vizinhos": ["sancaetano", "saladino"]
+  },
+  {
+    "id": "saladino",
+    "nome": "Prefeito Saladino",
+    "lat": 244,
+    "lng": 898,
+    "vizinhos": ["uting", "santoandre"]
+  },
+  {
+    "id": "santoandre",
+    "nome": "Santo André",
+    "lat": 223,
+    "lng": 924,
+    "vizinhos": ["saladino", "capuava"]
+  },
+  {
+    "id": "capuava",
+    "nome": "Capuava",
+    "lat": 201,
+    "lng": 951,
+    "vizinhos": ["santoandre", "maua"]
+  },
+  {
+    "id": "maua",
+    "nome": "Mauá",
+    "lat": 188,
+    "lng": 967,
+    "vizinhos": ["capuava", "guapituba"]
+  },
+  {
+    "id": "guapituba",
+    "nome": "Guapituba",
+    "lat": 174,
+    "lng": 984,
+    "vizinhos": ["maua", "ribeiraopires"]
+  },
+  {
+    "id": "ribeiraopires",
+    "nome": "Ribeirão Pires",
+    "lat": 162,
+    "lng": 1000,
+    "vizinhos": ["guapituba", "riograndedaserra"]
+  },
+  {
+    "id": "riograndedaserra",
+    "nome": "Rio Grande da Serra",
+    "lat": 143,
+    "lng": 1024,
+    "vizinhos": ["ribeiraopires"]
   }
 ]
