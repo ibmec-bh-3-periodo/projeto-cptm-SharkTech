@@ -49,26 +49,53 @@ function buscarCaminho(origemId: string, destinoId: string): Estacao[] | null {
 }
 
 // Rota principal
-app.get("/rota", (req: Request, res: Response) => {
-  const origem = (req.query.orig as string)?.toLowerCase();
-  const destino = (req.query.dest as string)?.toLowerCase();
-
-  if (!origem || !destino) {
-    return res.status(400).json({ erro: "Parâmetros orig e dest são obrigatórios" });
+// Função auxiliar para normalizar textos (remove acentos e deixa tudo minúsculo)
+function normalizarTexto(texto: string): string {
+    return texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
   }
-
-  const caminho = buscarCaminho(origem, destino);
-  if (!caminho) {
-    return res.status(404).json({ erro: "Nenhum trajeto encontrado" });
-  }
-
-  res.json({
-    origem,
-    destino,
-    total_estacoes: caminho.length,
-    trajeto: caminho
+  
+  // Rota principal
+  app.get("/rota", (req: Request, res: Response) => {
+    const origemNome = req.query.orig as string;
+    const destinoNome = req.query.dest as string;
+  
+    if (!origemNome || !destinoNome) {
+      return res.status(400).json({ erro: "Parâmetros orig e dest são obrigatórios" });
+    }
+  
+    // Normaliza nomes (para aceitar "Brás", "bras", "BRÁS" etc.)
+    const origemNormalizada = normalizarTexto(origemNome);
+    const destinoNormalizada = normalizarTexto(destinoNome);
+  
+    // Encontra as estações correspondentes pelo nome
+    const origemEstacao = estacoes.find(
+      e => normalizarTexto(e.nome) === origemNormalizada || e.id === origemNormalizada
+    );
+    const destinoEstacao = estacoes.find(
+      e => normalizarTexto(e.nome) === destinoNormalizada || e.id === destinoNormalizada
+    );
+  
+    if (!origemEstacao || !destinoEstacao) {
+      return res.status(404).json({ erro: "Estação de origem ou destino não encontrada" });
+    }
+  
+    // Busca o caminho entre as estações
+    const caminho = buscarCaminho(origemEstacao.id, destinoEstacao.id);
+    if (!caminho) {
+      return res.status(404).json({ erro: "Nenhum trajeto encontrado" });
+    }
+  
+    // Retorna o trajeto
+    res.json({
+      origem: origemEstacao.nome,
+      destino: destinoEstacao.nome,
+      total_estacoes: caminho.length,
+      trajeto: caminho
+    });
   });
-});
 
 app.listen(5001, () => {
   console.log("Servidor rodando na porta 5001");
