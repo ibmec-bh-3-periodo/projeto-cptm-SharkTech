@@ -333,6 +333,56 @@
   animation: zoomOut 0.4s ease forwards;
 }
 
+#trajeto-container {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  z-index: 1600;
+  font-family: "Inter", sans-serif;
+}
+
+#botao-trajeto {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#trajeto-opcoes {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  width: 180px;
+}
+
+#trajeto-opcoes select,
+#trajeto-opcoes button {
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+#trajeto-opcoes button {
+  background-color: #d60000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#trajeto-opcoes button:hover {
+  background-color: #a30000;
+}
+
   </style>
 </head>
 
@@ -351,12 +401,32 @@
   <input type="text" id="campo-busca" placeholder="Buscar estação..." />
   <div id="sugestoes-busca"></div>
 </div>
+<!-- BOTÃO E MENU DE TRAJETO -->
+<div id="trajeto-container">
+  <button id="botao-trajeto">🚆 Criar trajeto</button>
+
+  <div id="trajeto-opcoes">
+    <label>Origem:</label>
+    <select id="origem-select">
+      <option value="">Selecione...</option>
+    </select>
+
+    <label>Destino:</label>
+    <select id="destino-select">
+      <option value="">Selecione...</option>
+    </select>
+
+    <button id="gerar-rota">Gerar rota</button>
+    <button id="limpar-rota">Limpar rota</button>
+  </div>
+</div>
 <div id="botao-fechar" role="button" tabindex="0">
   <div class="voltar-inicio">
     <p>Início</p>
     <img src="./assets/img/home.svg" alt="Fechar mapa">
   </div>
 </div>
+
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -657,26 +727,75 @@ botaoFechar.addEventListener("click", () => {
   }, 400); // igual ao tempo do CSS
 });
 
-async function buscarTrajeto(origem, destino) {
-  try {
-    const resposta = await fetch(`http://localhost:5001/trajeto?origem=${origem}&destino=${destino}`);
-    const dados = await resposta.json();
-    console.log("Trajeto encontrado:", dados);
+// =====================
+// 🧭 FUNÇÃO DE TRAJETO
+// =====================
+let rotaAtiva = null;
 
-    // 🔹 Aqui você pode desenhar no mapa a linha entre as coordenadas das duas estações:
-    const latlngs = [
-      [dados.origem.lat, dados.origem.lng],
-      [dados.destino.lat, dados.destino.lng]
-    ];
+// Preencher selects com nomes das estações
+function preencherSelectsEstacoes() {
+  const origemSelect = document.getElementById("origem-select");
+  const destinoSelect = document.getElementById("destino-select");
+  origemSelect.innerHTML = "<option value=''>Selecione...</option>";
+  destinoSelect.innerHTML = "<option value=''>Selecione...</option>";
 
-    L.polyline(latlngs, { color: "blue", weight: 4 }).addTo(map);
-  } catch (erro) {
-    console.error("Erro ao buscar trajeto:", erro);
-  }
+  Object.values(estacoesMap).forEach(estacao => {
+    const opt1 = document.createElement("option");
+    const opt2 = document.createElement("option");
+    opt1.value = estacao.nome;
+    opt1.textContent = estacao.nome;
+    opt2.value = estacao.nome;
+    opt2.textContent = estacao.nome;
+    origemSelect.appendChild(opt1);
+    destinoSelect.appendChild(opt2);
+  });
 }
 
-// Exemplo de uso:
-buscarTrajeto("Brás", "Luz");
+// Mostrar / ocultar painel
+const botaoTrajeto = document.getElementById("botao-trajeto");
+const trajetoOpcoes = document.getElementById("trajeto-opcoes");
+
+botaoTrajeto.addEventListener("click", () => {
+  const visivel = trajetoOpcoes.style.display === "flex";
+  trajetoOpcoes.style.display = visivel ? "none" : "flex";
+  if (!visivel) preencherSelectsEstacoes();
+});
+
+// Gerar rota
+document.getElementById("gerar-rota").addEventListener("click", async () => {
+  const origem = document.getElementById("origem-select").value;
+  const destino = document.getElementById("destino-select").value;
+
+  if (!origem || !destino) {
+    alert("Selecione origem e destino!");
+    return;
+  }
+
+  try {
+    const resp = await fetch(`http://localhost:5001/rota?orig=${origem}&dest=${destino}`);
+    const dados = await resp.json();
+
+    if (!dados.trajeto) {
+      alert("Nenhum trajeto encontrado.");
+      return;
+    }
+
+    const pontos = dados.trajeto.map(e => [e.lat, e.lng]);
+    if (rotaAtiva) map.removeLayer(rotaAtiva);
+    rotaAtiva = L.polyline(pontos, { color: "#d60000", weight: 5 }).addTo(map);
+    map.fitBounds(rotaAtiva.getBounds());
+  } catch (err) {
+    console.error("Erro ao gerar rota:", err);
+  }
+});
+
+// Limpar rota
+document.getElementById("limpar-rota").addEventListener("click", () => {
+  if (rotaAtiva) {
+    map.removeLayer(rotaAtiva);
+    rotaAtiva = null;
+  }
+});
 </script>
 
 </body>
