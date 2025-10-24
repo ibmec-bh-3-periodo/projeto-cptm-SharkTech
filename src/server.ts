@@ -100,3 +100,7 @@ function normalizarTexto(texto: string): string {
 app.listen(5001, () => {
   console.log("Servidor rodando na porta 5001");
 });
+
+app.get('/', (req, res) => {
+  res.send('Servidor está funcionando!');
+});
