@@ -781,8 +781,37 @@ document.getElementById("gerar-rota").addEventListener("click", async () => {
 
     const pontos = dados.trajeto.map(e => [e.lat, e.lng]);
     if (rotaAtiva) map.removeLayer(rotaAtiva);
-    rotaAtiva = L.polyline(pontos, { color: "#d60000", weight: 5 }).addTo(map);
-    map.fitBounds(rotaAtiva.getBounds());
+
+    // 🎨 Linha estilizada
+    const outline = L.polyline(pontos, {
+      color: "#444",
+      weight: 8,
+      opacity: 0.3,
+      smoothFactor: 1
+    }).addTo(map);
+
+    const mainLine = L.polyline(pontos, {
+      color: "#d60000",
+      weight: 5,
+      opacity: 0.9,
+      smoothFactor: 1
+    }).addTo(map);
+
+    let offset = 0;
+    setInterval(() => {
+    offset = (offset + 1) % 20;
+    mainLine.setStyle({
+    dashArray: "10, 20",
+    dashOffset: offset
+    });
+    }, 150);
+
+    rotaAtiva = L.layerGroup([outline, mainLine]).addTo(map);
+    map.fitBounds(mainLine.getBounds());
+
+    // 👇 Fecha automaticamente o menu
+    trajetoOpcoes.style.display = "none";
+
   } catch (err) {
     console.error("Erro ao gerar rota:", err);
   }

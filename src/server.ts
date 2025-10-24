@@ -18,7 +18,7 @@ interface Estacao {
 const estacoesPath = path.join(__dirname, "estacoes.json");
 const estacoes: Estacao[] = JSON.parse(fs.readFileSync(estacoesPath, "utf-8"));
 
-// 🔹 Servir o frontend (index.html, CSS, JS)
+//Servir o frontend (index.html, CSS, JS)
 app.use(express.static(path.join(__dirname, "."))); // raiz do projeto
 
 // ---------------- ROTAS EXISTENTES ----------------
@@ -75,7 +75,7 @@ app.get("/rota", (req: Request, res: Response) => {
   });
 });
 
-// 🔹 Garante que o index.html seja entregue no acesso raiz
+//Garante que o index.html seja entregue no acesso raiz
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, ".." , "mapa.html"));
 });
