@@ -64,7 +64,7 @@
         font-size: 16px;
     }
 
-    .modal-content button {
+    #botao {
         width: 100%;
         background-color: #e30000;
         color: #f5f5f5;
@@ -92,4 +92,23 @@
         color: #C8102E;
         font-weight: bold;
     }
-}
+
+    .texto-cadastro {
+        margin-top: 16px;
+        text-align: center;
+        font-size: 14px;
+        color: #000000;
+      }
+      
+      #link-cadastro {
+        color: #e30000; /* vermelho igual ao estilo do botão */
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      
+      #link-cadastro:hover {
+        color: #a50e24; /* tom mais escuro ao passar o mouse */
+        text-decoration: underline;
+      }
+}      

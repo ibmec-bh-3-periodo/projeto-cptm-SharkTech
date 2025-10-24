@@ -16,19 +16,28 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <h2>Bem-vindo à CPTM</h2>
-      <p>Como você gostaria de ser chamado?</p>
-      <form id="nome-form">
+      <p>Login</p>
+      <form id="email-form">
         <input
           type="text"
-          id="nome"
-          placeholder="Digite seu nome"
+          id="email"
+          placeholder="Insira seu e- mail"
           required
         />
+        <form id="senha-form">
+          <input
+            type="text"
+            id="senha"
+            placeholder="Insira sua senha"
+            required
+          />
         <button id="botao" type="submit">Continuar</button>
+        <div class="texto-cadastro">
+          <span>Não tem uma conta? </span>
+          <a href="cadastro.html" id="link-cadastro">Cadastre-se</a>
+        </div>        
       </form>
     </div>
-
-
     <div id="loading" class="hidden" style="text-align: center; margin-top: 20px;">
       <img src="assets/img/Logo cptm.png" alt="Carregando CPTM" style="width: 80px; height: auto;">
       <p style="color: #f5f5f5; font-weight: bold;">Carregando...</p>
