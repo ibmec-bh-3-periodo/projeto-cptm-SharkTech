@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Minha Conta - CPTM</title>
+
+  <!-- === FAVICON (ícone da aba do navegador) === -->
+  <link rel="icon" type="image/png" href="./assets/img/CPTM_icon.svg.png">
+
   <link rel="stylesheet" href="./assets/css/tela-saldo.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -236,7 +240,6 @@
     let saldoVisivel = true;
     let idUsuario = 1;
 
-    // Toast moderno com ícone animado
     function mostrarMensagem(texto, tipo = "sucesso") {
       const icone = tipo === "erro"
         ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>'
