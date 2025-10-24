@@ -204,4 +204,45 @@
 }
 }
 
+/* === Modal base === */
+.modal { position: fixed; inset: 0; display: none; }
+.modal.aberto { display: block; }
+
+.modal-backdrop {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  position: relative;
+  max-width: 420px;
+  margin: 10vh auto 0;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 20px 24px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-close {
+  position: absolute; right: 10px; top: 8px;
+  background: none; border: 0; font-size: 24px; cursor: pointer;
+}
+
+#form-adicionar-saldo {
+  display: grid; gap: 12px; margin-top: 8px;
+}
+
+#form-adicionar-saldo label { font-weight: 500; }
+
+#valor-adicionar {
+  border: 1px solid #E2E2E2; border-radius: 10px;
+  padding: 12px 14px; font-size: 16px;
+}
+
+.btn-confirmar {
+  background: #D71920; color: #fff; border: none; border-radius: 10px;
+  padding: 12px 16px; font-weight: 600; cursor: pointer;
+}
+
+.msg-erro { color: #D71920; min-height: 1em; font-size: 14px; }
 
