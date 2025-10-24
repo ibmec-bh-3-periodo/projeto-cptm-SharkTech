@@ -4,7 +4,7 @@
     "username": "Henrique",
     "email": "henrique@email.com",
     "password": "hashed_password_123",
-    "saldo": 95.5,
+    "saldo": 100.5,
     "historico": [
       {
         "data": "2024-10-01T10:15:30Z",
@@ -15,6 +15,11 @@
         "data": "2024-10-05T14:20:00Z",
         "descricao": "Compra de bilhete: Brás → Luz",
         "valor": -4.5
+      },
+      {
+        "data": "2025-10-24T14:27:46.356Z",
+        "descricao": "Recarga de saldo (+R$ 5.00)",
+        "valor": 5
       }
     ]
   },
