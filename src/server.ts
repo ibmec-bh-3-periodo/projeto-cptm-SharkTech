@@ -1,14 +1,21 @@
-//const express = require('express');
-import express, {Request, Response}  from 'express';
+import express, { Request, Response } from "express";
 
 const server = express();
 server.use(express.json());
+
+interface historico {
+  data: Date;
+  descricao: string;
+  valor: number;
+}
 
 interface Login {
   id: number;
   nome: string;
   email: string;
   senha: string;
+  saldo: number;
+  historico: historico[];
 }
 
 let usuarios: Login[] = [];
@@ -40,7 +47,7 @@ server.post("/usuarios", (req, res) => {
     return res.status(400).json({ erro: "senha deve ter pelo menos 6 caracteres." });
   }
 
-  const jaExiste = usuarios.some(u => u.email.toLowerCase() === email.toLowerCase());
+  const jaExiste = usuarios.some((u) => u.email.toLowerCase() === email.toLowerCase());
   if (jaExiste) {
     return res.status(409).json({ erro: "email já cadastrado." });
   }
@@ -48,7 +55,15 @@ server.post("/usuarios", (req, res) => {
   const ultimoUsuario = usuarios[usuarios.length - 1];
   const proximoId = ultimoUsuario ? ultimoUsuario.id + 1 : 1;
 
-  const novoUsuario = { id: proximoId, nome, email, senha };
+  const novoUsuario: Login = {
+    id: proximoId,
+    nome,
+    email,
+    senha,
+    saldo: 0,
+    historico: [],
+  };
+
   usuarios.push(novoUsuario);
 
   const { senha: _omit, ...usuarioSemSenha } = novoUsuario;
@@ -56,5 +71,3 @@ server.post("/usuarios", (req, res) => {
 });
 
 server.listen(3000);
-
-server.listen(3000)
