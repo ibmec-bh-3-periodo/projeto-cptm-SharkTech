@@ -1,42 +1,69 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
+import { Usuario } from "./usuarios";
+import fs from "fs";
+import path from "path";
 
-const server = express();
-server.use(express.json());
+const router = express.Router();
 
-// "Banco de dados" só na memória (simulado)
-let usuarios = [
-  { username: 'Henrique', saldo: 100 }
-];
+// Caminho absoluto para o arquivo JSON (garante que funciona em qualquer ambiente)
+const caminhoUsuarios = path.join(__dirname, "usuarios.json");
 
-// Rota PUT para adicionar saldo
-server.put('/usuarios/:username/saldo', (req: Request, res: Response) => {
-  const { username } = req.params;   // vem da URL
-  const { valor } = req.body;        // vem do corpo da requisição
+// Função para carregar usuários
+const carregarUsuarios = (): Usuario[] => {
+  const data = fs.readFileSync(caminhoUsuarios, "utf-8");
+  return JSON.parse(data);
+};
 
-  // Verifica se o valor é um número
-  if (typeof valor !== 'number' || isNaN(valor)) {
-    return res.status(400).json({ error: 'Valor inválido!' });
+// Função para salvar usuários
+const salvarUsuarios = (usuarios: Usuario[]) => {
+  fs.writeFileSync(caminhoUsuarios, JSON.stringify(usuarios, null, 2));
+};
+
+// 🔹 GET - Buscar dados de um usuário específico
+router.get("/usuarios/:id", (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ erro: "ID inválido" });
   }
 
-  // Procura o usuário no "banco"
-  const usuario = usuarios.find(u => u.username === username);
+  const usuarios = carregarUsuarios();
+  const usuario = usuarios.find(u => u.id === id);
 
-  // Se não encontrar, retorna erro
   if (!usuario) {
-    return res.status(404).json({ error: 'Usuário não encontrado!' });
+    return res.status(404).json({ erro: "Usuário não encontrado" });
   }
 
-  // Atualiza o saldo
-  usuario.saldo += valor;
+  res.json(usuario);
+});
 
-  // Responde com o novo saldo
+// 🔹 PUT - Adicionar saldo a um usuário
+router.put("/usuarios/:id/saldo", (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const { valor } = req.body;
+
+  if (isNaN(id)) return res.status(400).json({ erro: "ID inválido" });
+  if (typeof valor !== "number" || valor <= 0)
+    return res.status(400).json({ erro: "O valor deve ser um número positivo" });
+
+  const usuarios = carregarUsuarios();
+  const usuario = usuarios.find(u => u.id === id);
+  if (!usuario) return res.status(404).json({ erro: "Usuário não encontrado" });
+
+  usuario.saldo += valor;
+  usuario.historico.push({
+    data: new Date().toISOString(),
+    descricao: `Recarga de saldo (+R$ ${valor.toFixed(2)})`,
+    valor
+  });
+
+  salvarUsuarios(usuarios);
+
   res.json({
-    message: 'Saldo atualizado com sucesso!',
-    saldoAtual: usuario.saldo
+    mensagem: "Saldo adicionado com sucesso!",
+    saldoAtual: usuario.saldo,
+    historico: usuario.historico
   });
 });
 
-// Inicia o servidor
-server.listen(3000, () => {
-  console.log('🚀 Servidor rodando em http://localhost:3000');
-});
+export default router;

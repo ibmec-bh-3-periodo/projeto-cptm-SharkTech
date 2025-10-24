@@ -4,22 +4,18 @@
     "username": "Henrique",
     "email": "henrique@email.com",
     "password": "hashed_password_123",
-    "saldo": 150.75,
+    "saldo": 95.5,
     "historico": [
       {
         "data": "2024-10-01T10:15:30Z",
         "descricao": "Recarga de saldo",
-        "valor": 100.0
+        "valor": 100
       },
       {
         "data": "2024-10-05T14:20:00Z",
         "descricao": "Compra de bilhete: Brás → Luz",
         "valor": -4.5
       }
-    ],
-    "favoritos": [
-      { "idEstacao": 1, "nome": "Brás", "linha": "Linha 10 - Turquesa" },
-      { "idEstacao": 2, "nome": "Luz", "linha": "Linha 7 - Rubi" }
     ]
   },
   {
@@ -32,7 +28,7 @@
       {
         "data": "2024-09-28T09:30:00Z",
         "descricao": "Recarga de saldo",
-        "valor": 50.0
+        "valor": 50
       },
       {
         "data": "2024-09-29T07:45:00Z",
@@ -41,8 +37,16 @@
       }
     ],
     "favoritos": [
-      { "idEstacao": 3, "nome": "Osasco", "linha": "Linha 8 - Diamante" },
-      { "idEstacao": 4, "nome": "Pinheiros", "linha": "Linha 9 - Esmeralda" }
+      {
+        "idEstacao": 3,
+        "nome": "Osasco",
+        "linha": "Linha 8 - Diamante"
+      },
+      {
+        "idEstacao": 4,
+        "nome": "Pinheiros",
+        "linha": "Linha 9 - Esmeralda"
+      }
     ]
   },
   {
@@ -50,21 +54,25 @@
     "username": "Mariana",
     "email": "mariana@email.com",
     "password": "senha456",
-    "saldo": 200.0,
+    "saldo": 200,
     "historico": [
       {
         "data": "2024-09-10T11:20:00Z",
         "descricao": "Recarga de saldo",
-        "valor": 120.0
+        "valor": 120
       },
       {
         "data": "2024-09-11T17:10:00Z",
         "descricao": "Compra de bilhete: Santo André → Tamanduateí",
-        "valor": -5.0
+        "valor": -5
       }
     ],
     "favoritos": [
-      { "idEstacao": 5, "nome": "Tamanduateí", "linha": "Linha 10 - Turquesa" }
+      {
+        "idEstacao": 5,
+        "nome": "Tamanduateí",
+        "linha": "Linha 10 - Turquesa"
+      }
     ]
   },
   {
@@ -77,12 +85,20 @@
       {
         "data": "2024-10-10T08:00:00Z",
         "descricao": "Recarga de saldo",
-        "valor": 40.0
+        "valor": 40
       }
     ],
     "favoritos": [
-      { "idEstacao": 6, "nome": "Jurubatuba", "linha": "Linha 9 - Esmeralda" },
-      { "idEstacao": 7, "nome": "Vila Olímpia", "linha": "Linha 9 - Esmeralda" }
+      {
+        "idEstacao": 6,
+        "nome": "Jurubatuba",
+        "linha": "Linha 9 - Esmeralda"
+      },
+      {
+        "idEstacao": 7,
+        "nome": "Vila Olímpia",
+        "linha": "Linha 9 - Esmeralda"
+      }
     ]
   },
   {
@@ -90,7 +106,7 @@
     "username": "Eduardo",
     "email": "eduardo@email.com",
     "password": "senha321",
-    "saldo": 50.0,
+    "saldo": 50,
     "historico": [],
     "favoritos": []
   },
@@ -108,7 +124,11 @@
       }
     ],
     "favoritos": [
-      { "idEstacao": 8, "nome": "Mauá", "linha": "Linha 10 - Turquesa" }
+      {
+        "idEstacao": 8,
+        "nome": "Mauá",
+        "linha": "Linha 10 - Turquesa"
+      }
     ]
   },
   {
@@ -116,16 +136,20 @@
     "username": "Túlio",
     "email": "tulio@email.com",
     "password": "senha987",
-    "saldo": 180.0,
+    "saldo": 180,
     "historico": [
       {
         "data": "2024-09-15T13:00:00Z",
         "descricao": "Recarga de saldo",
-        "valor": 80.0
+        "valor": 80
       }
     ],
     "favoritos": [
-      { "idEstacao": 9, "nome": "Lapa", "linha": "Linha 7 - Rubi" }
+      {
+        "idEstacao": 9,
+        "nome": "Lapa",
+        "linha": "Linha 7 - Rubi"
+      }
     ]
   }
 ]
