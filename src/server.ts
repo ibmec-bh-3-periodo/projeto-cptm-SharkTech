@@ -11,4 +11,6 @@ server.get("/fale-conosco", (req: Request, res: Response) => {
     res.redirect(url);
 });
 
-server.listen(5001)
+server.listen(5001, () => {
+    console.log("Servidor rodando em http://localhost:3000");
+  });
