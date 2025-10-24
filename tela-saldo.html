@@ -77,5 +77,32 @@
       iconeOlho.src = saldoVisivel ? './assets/img/eye-off.svg' : './assets/img/eye.svg';
     });
   </script>
+  <!-- Modal: Adicionar Saldo -->
+<div class="modal" id="modal-saldo" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo">
+  <div class="modal-backdrop" data-fecha-modal></div>
+  <div class="modal-content" role="document">
+    <button class="modal-close" id="fechar-modal" aria-label="Fechar">×</button>
+
+    <h2 id="modal-titulo">Adicionar saldo</h2>
+
+    <form id="form-adicionar-saldo">
+      <label for="valor-adicionar">Valor (R$)</label>
+      <input
+        id="valor-adicionar"
+        name="valor-adicionar"
+        type="text"
+        inputmode="decimal"
+        placeholder="Ex.: 15,00"
+        autocomplete="off"
+        required
+      />
+
+      <p class="msg-erro" id="erro-valor" aria-live="polite"></p>
+
+      <button type="submit" class="btn-confirmar">Adicionar</button>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
