@@ -7,5 +7,5 @@ const WHATSAPP_NUMBER = "0800 055 0121";
 
 server.get("/fale-conosco", (req: Request, res: Response) => {
     const mensagem = encodeURIComponent("Olá! Gostaria de saber mais sobre os serviços.");
-
+    const url = `https://wa.me/${0800 055 0121}?text=${mensagem}`;
 server.listen(5001)
