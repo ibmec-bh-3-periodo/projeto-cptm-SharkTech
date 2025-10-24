@@ -187,3 +187,88 @@ body, html {
 }
 
 .msg-erro { color: #D71920; min-height: 1em; font-size: 14px; }
+
+/* ==== FIX RESPONSIVO / ALINHAMENTO ==== */
+
+/* 1) Header: altura automática (remover height:20%) */
+.header {
+  height: auto;              /* era 20% */
+  padding-bottom: 28px;      /* dá respiro pra o container */
+}
+
+/* título "Minha Conta" sem empurrar demais */
+.minha-conta { margin-top: 12px; }
+
+/* 2) Container: arredonda e "encaixa" no header */
+.container {
+  background-color: #E0E0E0;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  margin-top: -16px;         /* encosta no header sem cobrir o título */
+  padding: 20px 16px 32px;
+  /* centraliza tudo e limita a largura */
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 3) Nada de larguras fixas: usa 100% com limite */
+.saldo,
+.adicionar-saldo,
+.card,
+.ajuda {
+  width: 100%;
+  max-width: 360px;          /* conforto visual dentro do container */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 4) Linha do saldo: valor + olho lado a lado, centralizados */
+.saldo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: static;          /* removemos o absolute antigo */
+  height: auto;
+  font-size: 24px;
+}
+
+/* botão do "olho" sem position absolute */
+#toggle-saldo {
+  position: static;          /* era absolute */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+/* 5) Botão "Adicionar saldo" ocupando a largura útil */
+.adicionar-saldo {
+  display: block;
+  width: 100%;
+  height: 48px;
+  margin-top: 12px;
+}
+
+/* 6) Cards empilhados, respingando bem */
+.acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;        /* centraliza os cards */
+}
+
+.card {
+  height: auto;               /* deixa crescer conforme o texto */
+  padding: 18px;
+}
+
+/* 7) Modal por cima de tudo */
+.modal { z-index: 1000; }
+
+/* 8) Pequeno ajuste no título em landscape para manter central e visível */
+@media (min-width: 700px) {
+  .minha-conta h3 { font-size: 28px; }
+}
