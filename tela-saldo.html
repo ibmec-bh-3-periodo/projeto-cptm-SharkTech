@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <header class="header">
     <div class="top-row">
@@ -27,7 +28,7 @@
       <div class="saldo">
         <span id="valor-saldo">R$ 14,70</span>
         <button id="toggle-saldo">
-          <img id="icone-olho" src="./assets/img/eye-off.svg">
+          <img id="icone-olho" src="./assets/img/eye-off.svg" alt="Ocultar saldo">
         </button>
       </div>
       <button class="adicionar-saldo">ADICIONAR SALDO</button>
@@ -64,174 +65,119 @@
     </div>
   </main>
 
-  <script>
-  // ========= Utils de moeda BRL =========
-  const BRL = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-
-  function formatBRL(num) {
-    return BRL.format(num);
-  }
-
-  function parseBRLToNumber(texto) {
-    if (!texto) return NaN;
-    // aceita "R$ 1.234,56", "1234,56", "1234.56"
-    let t = String(texto).trim()
-      .replace(/[^\d,.-]/g, '')     // remove R$, espaços etc.
-      .replace(/\.(?=\d{3}(,|$))/g, '') // remove pontos de milhar (antes da vírgula final)
-      .replace(',', '.');           // vírgula decimal -> ponto
-    return Number(t);
-  }
-
-  // ========= Estado e elementos =========
-  const valorSaldoEl = document.getElementById('valor-saldo');
-  const iconeOlho = document.getElementById('icone-olho');
-  const toggleBtn = document.getElementById('toggle-saldo');
-  const btnAdicionarSaldo = document.querySelector('.adicionar-saldo');
-
-  const modal = document.getElementById('modal-saldo');
-  const fecharModalBtn = document.getElementById('fechar-modal');
-  const formAdicionar = document.getElementById('form-adicionar-saldo');
-  const inputValor = document.getElementById('valor-adicionar');
-  const erroValor = document.getElementById('erro-valor');
-  const backdrop = modal.querySelector('[data-fecha-modal]');
-
-  let saldoVisivel = true;
-
-  // Carrega saldo do localStorage (ou do HTML se não houver)
-  function carregarSaldoInicial() {
-    const salvo = localStorage.getItem('saldoAtualReais');
-    if (salvo !== null) {
-      const num = Number(salvo);
-      if (!Number.isNaN(num)) return num;
-    }
-    return parseBRLToNumber(valorSaldoEl.textContent);
-  }
-
-  let saldoAtual = carregarSaldoInicial();
-  renderSaldo();
-
-  // ========= Renderização e visibilidade =========
-  function renderSaldo() {
-    valorSaldoEl.textContent = saldoVisivel ? formatBRL(saldoAtual) : '••••';
-    if (saldoVisivel) {
-      iconeOlho.src = './assets/img/eye-off.svg';
-      iconeOlho.alt = 'Ocultar saldo';
-    } else {
-      iconeOlho.src = './assets/img/eye.svg';
-      iconeOlho.alt = 'Mostrar saldo';
-    }
-  }
-
-  toggleBtn.addEventListener('click', () => {
-    saldoVisivel = !saldoVisivel;
-    renderSaldo();
-  });
-
-  // ========= Modal: abrir/fechar =========
-  function abrirModal() {
-    modal.classList.add('aberto');
-    modal.setAttribute('aria-hidden', 'false');
-    inputValor.value = '';
-    erroValor.textContent = '';
-    // foco no campo após abrir
-    setTimeout(() => inputValor.focus(), 0);
-    // impede scroll da página ao abrir modal (opcional)
-    document.body.style.overflow = 'hidden';
-  }
-
-  function fecharModal() {
-    modal.classList.remove('aberto');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    btnAdicionarSaldo.focus(); // volta foco pro botão
-  }
-
-  btnAdicionarSaldo.addEventListener('click', abrirModal);
-  fecharModalBtn.addEventListener('click', fecharModal);
-  backdrop.addEventListener('click', fecharModal);
-
-  // Tecla ESC fecha
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('aberto')) fecharModal();
-  });
-
-  // ========= Validação e submissão =========
-  formAdicionar.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const valorDigitado = inputValor.value;
-    const valorNum = parseBRLToNumber(valorDigitado);
-
-    if (Number.isNaN(valorNum)) {
-      erroValor.textContent = 'Digite um valor válido (ex.: 15,00).';
-      inputValor.focus();
-      return;
-    }
-    if (valorNum <= 0) {
-      erroValor.textContent = 'O valor deve ser maior que zero.';
-      inputValor.focus();
-      return;
-    }
-    if (valorNum > 5000) { // proteção simples contra valores absurdos
-      erroValor.textContent = 'Por favor, insira um valor até R$ 5.000,00.';
-      inputValor.focus();
-      return;
-    }
-
-    // Atualiza estado do saldo
-    saldoAtual = Number((saldoAtual + valorNum).toFixed(2));
-    localStorage.setItem('saldoAtualReais', String(saldoAtual));
-    renderSaldo();
-
-    // Fechar modal
-    fecharModal();
-  });
-
-  // ========= Mascara leve (opcional): troca ponto->vírgula ao digitar =========
-  inputValor.addEventListener('input', () => {
-    // não força demais: só evita letras e mantém vírgula decimal para pt-BR
-    let v = inputValor.value
-      .replace(/[^\d,.\s]/g, '') // remove letras/símbolos
-      .replace(/\s+/g, '');
-    // Se usuário digitar mais de uma vírgula/ponto, mantém o primeiro decimal
-    const partes = v.replace(',', '.').split('.');
-    if (partes.length > 2) {
-      v = partes[0] + ',' + partes.slice(1).join('').replace(/[^\d]/g, '');
-    } else {
-      // troca ponto por vírgula pra exibir
-      v = v.replace('.', ',');
-    }
-    inputValor.value = v;
-    erroValor.textContent = '';
-  });
-</script>
-
   <!-- Modal: Adicionar Saldo -->
-<div class="modal" id="modal-saldo" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo">
-  <div class="modal-backdrop" data-fecha-modal></div>
-  <div class="modal-content" role="document">
-    <button class="modal-close" id="fechar-modal" aria-label="Fechar">×</button>
+  <div class="modal" id="modal-saldo" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo">
+    <div class="modal-backdrop" data-fecha-modal></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" id="fechar-modal" aria-label="Fechar">×</button>
+      <h2 id="modal-titulo">Adicionar saldo</h2>
 
-    <h2 id="modal-titulo">Adicionar saldo</h2>
-
-    <form id="form-adicionar-saldo">
-      <label for="valor-adicionar">Valor (R$)</label>
-      <input
-        id="valor-adicionar"
-        name="valor-adicionar"
-        type="text"
-        inputmode="decimal"
-        placeholder="Ex.: 15,00"
-        autocomplete="off"
-        required
-      />
-
-      <p class="msg-erro" id="erro-valor" aria-live="polite"></p>
-
-      <button type="submit" class="btn-confirmar">Adicionar</button>
-    </form>
+      <form id="form-adicionar-saldo">
+        <label for="valor-adicionar">Valor (R$)</label>
+        <input id="valor-adicionar" name="valor-adicionar" type="text" inputmode="decimal" placeholder="Ex.: 15,00" autocomplete="off" required>
+        <p class="msg-erro" id="erro-valor" aria-live="polite"></p>
+        <button type="submit" class="btn-confirmar">Adicionar</button>
+      </form>
+    </div>
   </div>
-</div>
 
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const BRL = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const formatBRL = n => BRL.format(n);
+    const parseBRLToNumber = t => {
+      if (!t) return NaN;
+      return Number(String(t).trim().replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3}(,|$))/g, '').replace(',', '.'));
+    };
+
+    const valorSaldoEl = document.getElementById('valor-saldo');
+    const iconeOlho = document.getElementById('icone-olho');
+    const toggleBtn = document.getElementById('toggle-saldo');
+    const btnAdicionar = document.querySelector('.adicionar-saldo');
+
+    const modal = document.getElementById('modal-saldo');
+    const fecharModalBtn = document.getElementById('fechar-modal');
+    const backdrop = modal.querySelector('[data-fecha-modal]');
+    const form = document.getElementById('form-adicionar-saldo');
+    const inputValor = document.getElementById('valor-adicionar');
+    const erroValor = document.getElementById('erro-valor');
+
+    let saldoVisivel = true;
+    let saldoAtual = (() => {
+      const salvo = localStorage.getItem('saldoAtualReais');
+      if (salvo !== null && !Number.isNaN(Number(salvo))) return Number(salvo);
+      return parseBRLToNumber(valorSaldoEl.textContent);
+    })();
+
+    function renderSaldo() {
+      valorSaldoEl.textContent = saldoVisivel ? formatBRL(saldoAtual) : '••••';
+      iconeOlho.src = saldoVisivel ? './assets/img/eye-off.svg' : './assets/img/eye.svg';
+      iconeOlho.alt = saldoVisivel ? 'Ocultar saldo' : 'Mostrar saldo';
+    }
+    renderSaldo();
+
+    toggleBtn.addEventListener('click', () => {
+      saldoVisivel = !saldoVisivel;
+      renderSaldo();
+    });
+
+    function abrirModal() {
+      modal.classList.add('aberto');
+      modal.style.display = 'block';
+      modal.setAttribute('aria-hidden', 'false');
+      inputValor.value = '';
+      erroValor.textContent = '';
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => inputValor.focus(), 0);
+    }
+
+    function fecharModal() {
+      modal.classList.remove('aberto');
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      btnAdicionar.focus();
+    }
+
+    btnAdicionar.addEventListener('click', abrirModal);
+    fecharModalBtn.addEventListener('click', fecharModal);
+    backdrop.addEventListener('click', fecharModal);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('aberto')) fecharModal();
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const valorNum = parseBRLToNumber(inputValor.value);
+      if (Number.isNaN(valorNum) || valorNum <= 0) {
+        erroValor.textContent = 'Digite um valor válido (ex.: 15,00).';
+        inputValor.focus();
+        return;
+      }
+      if (valorNum > 5000) {
+        erroValor.textContent = 'Por favor, insira um valor até R$ 5.000,00.';
+        inputValor.focus();
+        return;
+      }
+
+      saldoAtual = Number((saldoAtual + valorNum).toFixed(2));
+      localStorage.setItem('saldoAtualReais', String(saldoAtual));
+      renderSaldo();
+      fecharModal();
+    });
+
+    inputValor.addEventListener('input', () => {
+      let v = inputValor.value.replace(/[^\d,.\s]/g, '').replace(/\s+/g, '');
+      const partes = v.replace(',', '.').split('.');
+      if (partes.length > 2) {
+        v = partes[0] + ',' + partes.slice(1).join('').replace(/[^\d]/g, '');
+      } else {
+        v = v.replace('.', ',');
+      }
+      inputValor.value = v;
+      erroValor.textContent = '';
+    });
+  });
+  </script>
 </body>
 </html>
