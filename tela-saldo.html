@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Minha Conta - CPTM</title>
   <link rel="stylesheet" href="./assets/css/tela-saldo.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,21 +17,19 @@
       <span class="title">CPTM</span>
       <img src="./assets/img/Logo cptm.png" alt="Logo CPTM" class="logo">
     </div>
-    <div class="minha-conta">
-        <h3>Minha Conta</h3>
-    </div>
+    <div class="minha-conta"><h3>Minha Conta</h3></div>
   </header>
 
   <main class="container">
     <section class="saldo-box">
       <p class="sub">Saldo atual</p>
       <div class="saldo">
-        <span id="valor-saldo">R$ 14,70</span>
-        <button id="toggle-saldo">
+        <span id="valor-saldo">R$ 0,00</span>
+        <button id="toggle-saldo" aria-label="Alternar visibilidade do saldo">
           <img id="icone-olho" src="./assets/img/eye-off.svg" alt="Ocultar saldo">
         </button>
       </div>
-      <button class="adicionar-saldo">ADICIONAR SALDO</button>
+      <button class="adicionar-saldo" id="btn-adicionar">ADICIONAR SALDO</button>
     </section>
 
     <section class="acoes">
@@ -60,61 +58,146 @@
       </div>
     </section>
 
-    <div class="ajuda">
-      <img src="./assets/img/help-icon.svg" alt="Ajuda" class="help-icon"> CENTRAL DE AJUDA
-    </div>
+    <a class="ajuda" href="#">
+      <img src="./assets/img/help-icon.svg" alt="" class="help-icon"> CENTRAL DE AJUDA
+    </a>
   </main>
 
-  <!-- Modal: Adicionar Saldo -->
-  <div class="modal" id="modal-saldo" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo">
-    <div class="modal-backdrop" data-fecha-modal></div>
-    <div class="modal-content" role="document">
+  <!-- Modal: overlay + conteúdo -->
+  <div class="modal-overlay" id="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo">
+    <div class="modal" role="document">
       <button class="modal-close" id="fechar-modal" aria-label="Fechar">×</button>
-      <h2 id="modal-titulo">Adicionar saldo</h2>
+      <h3 id="modal-titulo">Adicionar Saldo</h3>
 
-      <form id="form-adicionar-saldo">
-        <label for="valor-adicionar">Valor (R$)</label>
-        <input id="valor-adicionar" name="valor-adicionar" type="text" inputmode="decimal" placeholder="Ex.: 15,00" autocomplete="off" required>
-        <p class="msg-erro" id="erro-valor" aria-live="polite"></p>
-        <button type="submit" class="btn-confirmar">Adicionar</button>
-      </form>
+      <input type="text" id="valorInput" class="valor-input" placeholder="Digite o valor (R$)" inputmode="decimal" autocomplete="off">
+
+      <div class="botoes-rapidos">
+        <button type="button" data-add="2">+2</button>
+        <button type="button" data-add="5">+5</button>
+        <button type="button" data-add="10">+10</button>
+        <button type="button" data-add="20">+20</button>
+      </div>
+
+      <p class="msg-erro" id="erro-valor" aria-live="polite"></p>
+
+      <div class="modal-actions">
+        <button class="cancelar" id="cancelar" type="button">Cancelar</button>
+        <button class="confirmar" id="confirmar" type="button">Confirmar</button>
+      </div>
     </div>
   </div>
 
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const BRL = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-    const formatBRL = n => BRL.format(n);
-    const parseBRLToNumber = t => {
+    // ===== Config (troque se precisar) =====
+    const API_BASE = "http://localhost:3000";   // seu backend (opcional)
+    const USER_ID  = 1;
+
+    // ===== Utilitários BRL =====
+    const BRL = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
+    const fmt  = n => BRL.format(n);
+    const parse = t => {
       if (!t) return NaN;
-      return Number(String(t).trim().replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3}(,|$))/g, '').replace(',', '.'));
+      return Number(String(t).trim()
+        .replace(/[^\d,.-]/g,'')
+        .replace(/\.(?=\d{3}(,|$))/g,'')
+        .replace(',', '.'));
     };
 
-    const valorSaldoEl = document.getElementById('valor-saldo');
-    const iconeOlho = document.getElementById('icone-olho');
-    const toggleBtn = document.getElementById('toggle-saldo');
-    const btnAdicionar = document.querySelector('.adicionar-saldo');
+    // ===== Seletores =====
+    const valorSaldo = document.getElementById('valor-saldo');
+    const iconeOlho  = document.getElementById('icone-olho');
+    const toggleBtn  = document.getElementById('toggle-saldo');
+    const btnAdd     = document.getElementById('btn-adicionar');
 
-    const modal = document.getElementById('modal-saldo');
+    const overlay    = document.getElementById('modal-overlay');
     const fecharModalBtn = document.getElementById('fechar-modal');
-    const backdrop = modal.querySelector('[data-fecha-modal]');
-    const form = document.getElementById('form-adicionar-saldo');
-    const inputValor = document.getElementById('valor-adicionar');
-    const erroValor = document.getElementById('erro-valor');
+    const valorInput = document.getElementById('valorInput');
+    const erroValor  = document.getElementById('erro-valor');
+    const btnCancelar= document.getElementById('cancelar');
+    const btnConfirm = document.getElementById('confirmar');
+    const quickBtns  = document.querySelectorAll('.botoes-rapidos button');
+    const toast      = document.getElementById('toast');
 
+    // ===== Estado =====
     let saldoVisivel = true;
-    let saldoAtual = (() => {
-      const salvo = localStorage.getItem('saldoAtualReais');
-      if (salvo !== null && !Number.isNaN(Number(salvo))) return Number(salvo);
-      return parseBRLToNumber(valorSaldoEl.textContent);
-    })();
+    let saldoAtual = 0;
+    let modoOffline = false; // true quando API indisponível
 
+    // ===== Toast =====
+    function toastMsg(texto, tipo="ok") {
+      const iconOK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke="currentColor" fill="none" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+      const iconER = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke="currentColor" fill="none" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+      toast.innerHTML = (tipo==="erro"?iconER:iconOK) + texto;
+      toast.classList.remove('erro','mostrar');
+      if (tipo==="erro") toast.classList.add('erro');
+      requestAnimationFrame(()=>toast.classList.add('mostrar'));
+      clearTimeout(toast._t); toast._t = setTimeout(()=>toast.classList.remove('mostrar'), 2800);
+    }
+
+    // ===== Render do saldo =====
     function renderSaldo() {
-      valorSaldoEl.textContent = saldoVisivel ? formatBRL(saldoAtual) : '••••';
+      valorSaldo.textContent = saldoVisivel ? fmt(saldoAtual) : '••••';
+      valorSaldo.dataset.valorReal = fmt(saldoAtual);
       iconeOlho.src = saldoVisivel ? './assets/img/eye-off.svg' : './assets/img/eye.svg';
       iconeOlho.alt = saldoVisivel ? 'Ocultar saldo' : 'Mostrar saldo';
     }
-    renderSaldo();
+
+    // ===== API helpers (com fallback localStorage) =====
+    const LS_KEY = 'saldoAtualReais';
+
+    async function carregarSaldo() {
+      try {
+        const r = await fetch(`${API_BASE}/usuarios/${USER_ID}`);
+        if (!r.ok) throw new Error('HTTP '+r.status);
+        const user = await r.json();
+        saldoAtual = Number(user.saldo ?? user.saldoAtual ?? 0);
+        modoOffline = false;
+      } catch {
+        // fallback offline
+        const salvo = localStorage.getItem(LS_KEY);
+        saldoAtual = salvo ? Number(salvo) : 0;
+        modoOffline = true;
+      }
+      renderSaldo();
+    }
+
+    async function adicionarSaldo(valor) {
+      if (modoOffline) {
+        // atualiza localmente
+        saldoAtual = Number((saldoAtual + valor).toFixed(2));
+        localStorage.setItem(LS_KEY, String(saldoAtual));
+        renderSaldo();
+        toastMsg('Saldo adicionado (modo offline).');
+        return;
+      }
+      // tenta via API; se falhar, cai pra offline
+      try {
+        const r = await fetch(`${API_BASE}/usuarios/${USER_ID}/saldo`, {
+          method:'PUT',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ valor })
+        });
+        if (!r.ok) throw new Error('HTTP '+r.status);
+        const data = await r.json();
+        saldoAtual = Number(data.saldoAtual ?? data.saldo ?? (saldoAtual + valor));
+        localStorage.setItem(LS_KEY, String(saldoAtual)); // mantém cache
+        renderSaldo();
+        toastMsg('Saldo adicionado com sucesso!');
+      } catch {
+        modoOffline = true;
+        // faz local mesmo assim
+        saldoAtual = Number((saldoAtual + valor).toFixed(2));
+        localStorage.setItem(LS_KEY, String(saldoAtual));
+        renderSaldo();
+        toastMsg('API indisponível: aplicado localmente.', 'erro');
+      }
+    }
+
+    // ===== Eventos UI =====
+    window.addEventListener('DOMContentLoaded', carregarSaldo);
 
     toggleBtn.addEventListener('click', () => {
       saldoVisivel = !saldoVisivel;
@@ -122,62 +205,61 @@
     });
 
     function abrirModal() {
-      modal.classList.add('aberto');
-      modal.style.display = 'block';
-      modal.setAttribute('aria-hidden', 'false');
-      inputValor.value = '';
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+      valorInput.value = '';
       erroValor.textContent = '';
       document.body.style.overflow = 'hidden';
-      setTimeout(() => inputValor.focus(), 0);
+      setTimeout(()=>valorInput.focus(),0);
     }
-
     function fecharModal() {
-      modal.classList.remove('aberto');
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden', 'true');
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
-      btnAdicionar.focus();
+      btnAdd.focus();
     }
 
-    btnAdicionar.addEventListener('click', abrirModal);
-    fecharModalBtn.addEventListener('click', fecharModal);
-    backdrop.addEventListener('click', fecharModal);
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && modal.classList.contains('aberto')) fecharModal();
-    });
+    document.getElementById('btn-adicionar').addEventListener('click', abrirModal);
+    document.getElementById('fechar-modal').addEventListener('click', fecharModal);
+    document.getElementById('cancelar').addEventListener('click', fecharModal);
+    overlay.addEventListener('click', (e)=>{ if(e.target===overlay) fecharModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.style.display==='flex') fecharModal(); });
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const valorNum = parseBRLToNumber(inputValor.value);
-      if (Number.isNaN(valorNum) || valorNum <= 0) {
-        erroValor.textContent = 'Digite um valor válido (ex.: 15,00).';
-        inputValor.focus();
-        return;
-      }
-      if (valorNum > 5000) {
-        erroValor.textContent = 'Por favor, insira um valor até R$ 5.000,00.';
-        inputValor.focus();
-        return;
-      }
-
-      saldoAtual = Number((saldoAtual + valorNum).toFixed(2));
-      localStorage.setItem('saldoAtualReais', String(saldoAtual));
-      renderSaldo();
-      fecharModal();
-    });
-
-    inputValor.addEventListener('input', () => {
-      let v = inputValor.value.replace(/[^\d,.\s]/g, '').replace(/\s+/g, '');
+    // máscara leve
+    valorInput.addEventListener('input', () => {
+      let v = valorInput.value.replace(/[^\d,.\s]/g,'').replace(/\s+/g,'');
       const partes = v.replace(',', '.').split('.');
-      if (partes.length > 2) {
-        v = partes[0] + ',' + partes.slice(1).join('').replace(/[^\d]/g, '');
-      } else {
-        v = v.replace('.', ',');
-      }
-      inputValor.value = v;
+      if (partes.length > 2) v = partes[0] + ',' + partes.slice(1).join('').replace(/[^\d]/g,'');
+      else v = v.replace('.', ',');
+      valorInput.value = v;
       erroValor.textContent = '';
     });
-  });
+
+    // botões rápidos
+    quickBtns.forEach(b => b.addEventListener('click', () => {
+      const atual = parse(valorInput.value) || 0;
+      valorInput.value = String((atual + Number(b.dataset.add)).toString().replace('.', ','));
+      valorInput.dispatchEvent(new Event('input'));
+    }));
+
+    // confirmar
+    btnConfirm.addEventListener('click', async () => {
+      const num = parse(valorInput.value);
+      if (Number.isNaN(num) || num <= 0) {
+        erroValor.textContent = 'Digite um valor válido (ex.: 15,00).';
+        valorInput.focus();
+        toastMsg('Insira um valor válido!', 'erro');
+        return;
+      }
+      if (num > 5000) {
+        erroValor.textContent = 'Valor máximo: R$ 5.000,00.';
+        valorInput.focus();
+        toastMsg('Valor muito alto.', 'erro');
+        return;
+      }
+      await adicionarSaldo(num);
+      fecharModal();
+    });
   </script>
 </body>
 </html>
