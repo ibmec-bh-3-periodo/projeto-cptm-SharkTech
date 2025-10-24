@@ -383,6 +383,31 @@
   background-color: #a30000;
 }
 
+.toast {
+  text-align: center;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 30, 30, 0.9);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, bottom 0.4s ease;
+  z-index: 9999;
+}
+.toast.show {
+  opacity: 1;
+  bottom: 80px;
+}
+
+.toast.success { background: #28a745; }
+.toast.error { background: #d60000; }
+.toast.warning { background: #ff9800; }
+
   </style>
 </head>
 
@@ -425,6 +450,7 @@
     <button id="gerar-rota">Gerar rota</button>
     <button id="limpar-rota">Limpar rota</button>
   </div>
+  <div id="toast" class="toast"></div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -760,13 +786,22 @@ botaoTrajeto.addEventListener("click", () => {
   if (!visivel) preencherSelectsEstacoes();
 });
 
+function mostrarToast(mensagem, tipo = "warning") {
+  const toast = document.getElementById("toast");
+  toast.textContent = mensagem;
+  toast.className = `toast show ${tipo}`;
+  setTimeout(() => {
+    toast.className = "toast";
+  }, 3000);
+}
+
 // Gerar rota
 document.getElementById("gerar-rota").addEventListener("click", async () => {
   const origem = document.getElementById("origem-select").value;
   const destino = document.getElementById("destino-select").value;
 
   if (!origem || !destino) {
-    alert("Selecione origem e destino!");
+    mostrarToast("⚠️ Selecione origem e destino", "warning");
     return;
   }
 
@@ -775,7 +810,7 @@ document.getElementById("gerar-rota").addEventListener("click", async () => {
     const dados = await resp.json();
 
     if (!dados.trajeto) {
-      alert("Nenhum trajeto encontrado.");
+      mostrarToast("❌ Nenhum trajeto encontrado", "error");
       return;
     }
 
