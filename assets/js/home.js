@@ -34,3 +34,8 @@ mapa.addEventListener("click", () => {
     window.location.href = "mapa.html";
   }, 850);
 });
+
+function abrirFaleConosco() {
+  const url = "http://localhost:3000/fale-conosco";
+  window.location.href = url;
+}
