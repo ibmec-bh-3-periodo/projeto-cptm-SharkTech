@@ -68,6 +68,8 @@ server.post('/login', (req: Request, res: Response) => {
  * - Atualiza o arquivo usuarios.json
  * - Retorna o novo saldo
  */
+
+// pra isso tudo funcionar, talvez tenhamos que adicionar um valor pra cada passagem, mas nao tenho certeza
 server.put('/tela-saldo', (req: Request, res: Response) => {
   const { userId, valorPassagem } = req.body;
 
