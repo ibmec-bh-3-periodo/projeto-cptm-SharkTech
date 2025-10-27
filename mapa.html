@@ -870,11 +870,22 @@ document.getElementById("gerar-rota").addEventListener("click", async () => {
     }).addTo(map);
 
     const mainLine = L.polyline(pontos, {
-      color: "#d60000",
-      weight: 5,
-      opacity: 0.9,
-      smoothFactor: 1
-    }).addTo(map);
+  color: "#E60026",        // vermelho CPTM
+  weight: 6,               // um pouco mais grossa
+  opacity: 0.95,
+  smoothFactor: 1,
+  className: "trajeto-linha" // adiciona classe para CSS opcional
+}).addTo(map);
+
+// Adiciona um leve brilho via CSS:
+const style = document.createElement("style");
+style.innerHTML = `
+  .trajeto-linha {
+    filter: drop-shadow(0 0 6px rgba(230, 0, 38, 0.5));
+  }
+`;
+document.head.appendChild(style);
+  
 
     let offset = 0;
     setInterval(() => {
