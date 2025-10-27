@@ -61,6 +61,13 @@
   </section>
   
   <div id="mapa-transicao"></div>
-<script src="assets/js/home.js"></script>
+<script src="assets/js/home.js">
+  document.querySelectorAll('.icone-botao').forEach(btn => {
+    const label = btn.querySelector('span')?.textContent?.trim();
+    if (label === 'Favoritos') {
+      btn.addEventListener('click', () => location.href = 'favorites.html');
+    }
+  });
+</script>
 </body>
 </html>
