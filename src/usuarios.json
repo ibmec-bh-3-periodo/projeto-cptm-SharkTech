@@ -4,17 +4,12 @@
     "username": "Henrique",
     "email": "henrique@email.com",
     "password": "hashed_password_123",
-    "saldo": 100.5,
+    "saldo": 105.0,
     "historico": [
       {
         "data": "2024-10-01T10:15:30Z",
         "descricao": "Recarga de saldo",
         "valor": 100
-      },
-      {
-        "data": "2024-10-05T14:20:00Z",
-        "descricao": "Compra de bilhete: Brás → Luz",
-        "valor": -4.5
       },
       {
         "data": "2025-10-24T14:27:46.356Z",
@@ -38,7 +33,7 @@
       {
         "data": "2024-09-29T07:45:00Z",
         "descricao": "Compra de bilhete: Osasco → Pinheiros",
-        "valor": -4.4
+        "valor": -5
       }
     ],
     "favoritos": [
@@ -125,7 +120,7 @@
       {
         "data": "2024-09-05T07:10:00Z",
         "descricao": "Compra de bilhete: Brás → Mauá",
-        "valor": -4.6
+        "valor": -5
       }
     ],
     "favoritos": [
