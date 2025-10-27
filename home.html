@@ -17,32 +17,35 @@
         <img class="profile" src="assets/img/icons8-male-user-96.svg" alt="Ícone de usuário" />
       </div>
       <img class="CPTM-escrito" src="assets/img/cptmescrito.png" alt="CPTM ECRITO" />
-      <img  class="logo" src="assets/img/Logo cptm.svg" alt="Logo da CPTM" />
+      <img class="logo" src="assets/img/Logo cptm.svg" alt="Logo da CPTM" />
     </div>
   </div>
 
   <div class="container">
     <p class="boas-vindas"></p>
 
-  <div class="mapa-zoom-wrapper" id="mapaWrapper">
-    <div class="mapa" id="mapaHome"></div>
-  </div>
+    <div class="mapa-zoom-wrapper" id="mapaWrapper">
+      <div class="mapa" id="mapaHome"></div>
+    </div>
 
     <div class="carousel">
       <div class="carousel-inner">
-        <button class="icone-botao" onclick="window.location.href='linhas.html'">
+        <button class="icone-botao" type="button" onclick="location.href='linhas.html'">
           <img src="assets/img/train.svg" alt="Linhas" />
           <span>Linhas</span>
         </button>
-        <button class="icone-botao">
+
+        <button class="icone-botao" type="button" onclick="location.href='favoritos.html'">
           <img src="assets/img/favorite-icon.svg" alt="Favoritos" />
           <span>Favoritos</span>
         </button>
-        <button class="icone-botao">
+
+        <button class="icone-botao" type="button">
           <img src="assets/img/qr_code-icon.svg" alt="QR Code" />
           <span>QR Code</span>
         </button>
-        <button class="icone-botao">
+
+        <button class="icone-botao" type="button">
           <img src="assets/img/chat-icon.svg" alt="Fale conosco" />
           <span>Fale conosco</span>
         </button>
@@ -61,13 +64,21 @@
   </section>
   
   <div id="mapa-transicao"></div>
-<script src="assets/js/home.js">
-  document.querySelectorAll('.icone-botao').forEach(btn => {
-    const label = btn.querySelector('span')?.textContent?.trim();
-    if (label === 'Favoritos') {
-      btn.addEventListener('click', () => location.href = 'favorites.html');
+
+  <!-- Seu script original -->
+  <script src="assets/js/home.js"></script>
+
+  <!-- Garantindo que o mapa não bloqueie cliques nos botões -->
+  <style>
+    #mapaWrapper, #mapaHome {
+      pointer-events: none;
     }
-  });
-</script>
+    .carousel {
+      pointer-events: auto;
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+
 </body>
 </html>
