@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <!-- HEADER igual ao da tela de saldo -->
+  <!-- HEADER (mesmo padrão da tela de saldo) -->
   <header class="header">
     <div class="top-row">
       <a class="link-back" href="home.html"><button class="back-button">←</button></a>
@@ -23,103 +23,76 @@
 
   <!-- BOLHA CINZA -->
   <main class="container">
-    <!-- Barra de busca + adicionar (mesma linguagem visual) -->
+    <!-- Busca -->
     <section class="busca-box">
       <input id="searchInput" type="text" placeholder="Buscar estação, linha ou trajeto" aria-label="Buscar favorito">
       <button id="btnAdd" type="button" class="btn-add">Adicionar</button>
     </section>
 
-    <!-- Lista de favoritos em cards, coerentes com a página de saldo -->
+    <!-- Lista -->
     <section id="favList" class="lista">
-      <!-- Exemplo 1 -->
+      <!-- Mapa da rede -->
       <article class="card">
         <div class="esq">
           <div class="pill mapa">
-            <img src="./assets/img/train.svg" alt="Abrir">
+            <img src="./assets/img/train.svg" alt="Mapa da rede">
           </div>
           <div class="info">
             <h3>Mapa da rede</h3>
             <p>Acesso rápido</p>
           </div>
         </div>
-        <div class="dir">
-          <button class="icon-btn abrir" title="Abrir" onclick="location.href='mapa.html'">
-            <img src="./assets/play_arrow.svg" alt="Abrir">
-          </button>
-          <button class="icon-btn remover" title="Remover">
-            <img src="./assets/img/trash.svg" alt="Remover">
-          </button>
-        </div>
+        <button class="line-action mapa" title="Abrir" onclick="location.href='mapa.html'">
+          <img src="./assets/play_arrow.svg" alt="Abrir">
+        </button>
       </article>
 
-      <!-- Exemplo 2 -->
+      <!-- Linha 7 -->
       <article class="card">
         <div class="esq">
           <div class="pill rubi">
-            <img src="./assets/img/train.svg" alt="Linha 7 - Rubi">
+            <img src="./assets/img/train.svg" alt="Linha 7 – Rubi">
           </div>
           <div class="info">
             <h3>Linha 7 – Rubi</h3>
             <p>Último acesso: ontem</p>
           </div>
         </div>
-        <div class="dir">
-          <button class="icon-btn abrir" title="Detalhes">
-            <img src="./assets/play_arrow.svg" alt="Detalhes">
-          </button>
-          <button class="icon-btn remover" title="Remover">
-            <img src="./assets/img/trash.svg" alt="Remover">
-          </button>
-        </div>
+        <button class="line-action rubi" title="Detalhes">
+          <img src="./assets/play_arrow.svg" alt="Detalhes">
+        </button>
       </article>
 
-      <!-- Exemplo 3 -->
+      <!-- Linha 10 -->
       <article class="card">
         <div class="esq">
           <div class="pill turquesa">
-            <img src="./assets/img/train.svg" alt="Linha 10 - Turquesa">
+            <img src="./assets/img/train.svg" alt="Linha 10 – Turquesa">
           </div>
           <div class="info">
             <h3>Linha 10 – Turquesa</h3>
             <p>Estação favorita: Utinga</p>
           </div>
         </div>
-        <div class="dir">
-          <button class="icon-btn abrir" title="Detalhes">
-            <img src="./assets/play_arrow.svg" alt="Detalhes">
-          </button>
-          <button class="icon-btn remover" title="Remover">
-            <img src="./assets/img/trash.svg" alt="Remover">
-          </button>
-        </div>
+        <button class="line-action turquesa" title="Detalhes">
+          <img src="./assets/play_arrow.svg" alt="Detalhes">
+        </button>
       </article>
     </section>
 
-    <!-- Estado vazio (aparece quando não houver cards) -->
     <div id="emptyState" class="empty" hidden>Nenhum favorito ainda.</div>
   </main>
 
   <script>
-    // ===== Helpers =====
+    // Estado vazio e adicionar mock
     const favList = document.getElementById('favList');
     const emptyState = document.getElementById('emptyState');
     const searchInput = document.getElementById('searchInput');
     const btnAdd = document.getElementById('btnAdd');
 
-    function syncEmpty() {
-      emptyState.hidden = favList.children.length > 0;
-    }
+    function syncEmpty() { emptyState.hidden = favList.children.length > 0; }
     syncEmpty();
 
-    // Remover item
-    favList.addEventListener('click', (e) => {
-      const btn = e.target.closest('.remover');
-      if (!btn) return;
-      btn.closest('.card').remove();
-      syncEmpty();
-    });
-
-    // Adicionar item (mock simples)
     btnAdd.addEventListener('click', () => {
       const value = searchInput.value.trim();
       if (!value) return;
@@ -128,22 +101,15 @@
       card.className = 'card';
       card.innerHTML = `
         <div class="esq">
-          <div class="pill generica">
-            <img src="./assets/img/train.svg" alt="Favorito">
-          </div>
+          <div class="pill generica"><img src="./assets/img/train.svg" alt="Favorito"></div>
           <div class="info">
             <h3>${value}</h3>
             <p>Adicionado agora</p>
           </div>
         </div>
-        <div class="dir">
-          <button class="icon-btn abrir" title="Abrir">
-            <img src="./assets/play_arrow.svg" alt="Abrir">
-          </button>
-          <button class="icon-btn remover" title="Remover">
-            <img src="./assets/img/trash.svg" alt="Remover">
-          </button>
-        </div>`;
+        <button class="line-action generica" title="Abrir">
+          <img src="./assets/play_arrow.svg" alt="Abrir">
+        </button>`;
       favList.prepend(card);
       searchInput.value = '';
       syncEmpty();

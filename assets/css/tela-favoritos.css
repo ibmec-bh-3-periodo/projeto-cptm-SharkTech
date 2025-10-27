@@ -1,14 +1,14 @@
-/* ===== BASE (igual à tela de saldo) ===== */
+/* ===== BASE – igual à tela de saldo ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
   height: 100%;
   font-family: 'Inter', sans-serif;
-  background: #d60000;             /* fundo vermelho */
+  background: #d60000;            /* fundo vermelho */
   overscroll-behavior: contain;
 }
 
-/* ===== HEADER (mesmo estilo) ===== */
+/* ===== HEADER ===== */
 .header {
   background: #d60000;
   color: #fff;
@@ -41,11 +41,13 @@ html, body {
 .logo { height: 24px; }
 .title { font-weight: 700; }
 
-/* Título no header com a MESMA hierarquia visual */
+/* Título no mesmo estilo do saldo */
 .minha-conta { margin-top: 12px; font-size: 20px; }
 .minha-conta h3 { font-weight: 500; }
 
-/* ===== BOLHA CINZA (container) ===== */
+/* ===== CONTAINER (bolha cinza até o rodapé) ===== */
+:root { --header-h: 128px; } /* altura aproximada do header */
+
 .container {
   background-color: #E0E0E0;
   border-top-left-radius: 24px;
@@ -55,6 +57,11 @@ html, body {
   max-width: 420px;
   margin-left: auto;
   margin-right: auto;
+
+  /* garante preenchimento até o fim da tela */
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== BUSCA ===== */
@@ -86,22 +93,24 @@ html, body {
   cursor: pointer;
 }
 
-/* ===== LISTA DE CARDS (coerente com a tela de saldo) ===== */
+/* ===== LISTA / CARDS – coerente com a tela de saldo ===== */
 .lista {
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: center;
+  /* ocupa o restante, empurra o fundo cinza até embaixo */
+  flex: 1;
 }
 
 .card {
-  background: #fff;
+  background: white;
   border-radius: 12px;
   padding: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 360px;
   position: relative;
@@ -111,34 +120,39 @@ html, body {
 .info h3 { margin: 0 0 2px; font-size: 16px; font-weight: 600; color: #121212; }
 .info p  { font-size: 13px; color: #444; }
 
-/* “Pílula” colorida com ícone de trem */
+/* Pílula colorida com trem à esquerda */
 .pill {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border-radius: 10px;
-  display: grid;
-  place-items: center;
+  display: grid; place-items: center;
 }
 .pill img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
 
-/* Cores das linhas */
-.mapa     { background: #ef4444; } /* pode ajustar se tiver padrão */
-.rubi     { background: #a3212e; }
-.turquesa { background: #2f7c8a; }
-.coral    { background: #c24e2a; }
-.safira   { background: #171d69; }
-.jade     { background: #189a53; }
-.generica { background: #9ca3af; }
-
-/* Ações à direita */
-.dir { display: flex; gap: 8px; }
-.icon-btn {
-  width: 36px; height: 36px;
-  border: none; border-radius: 10px;
-  background: #f3f4f6; cursor: pointer;
-  display: grid; place-items: center;
+/* Botão “faixa” à direita com seta (igual Linhas) */
+.line-action {
+  width: 70px;
+  height: 100%;
+  position: absolute;
+  right: 0; top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  background: #ef4444;            /* cor padrão; cada linha sobrescreve */
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
-.icon-btn img { width: 18px; height: 18px; }
+.line-action img { width: 28px; height: 28px; filter: brightness(0) invert(1); }
+
+/* Paleta das linhas (ajuste se preferir) */
+.mapa     { background: #E30000; }
+.rubi     { background: #8c2b61; }
+.turquesa { background: #458797; }
+.coral    { background: #bf4124; }
+.safira   { background: #1c146b; }
+.jade     { background: #038c3e; }
+.generica { background: #9ca3af; }
 
 /* Estado vazio */
 .empty {
@@ -146,6 +160,7 @@ html, body {
   color: #444;
   font-size: 14px;
   padding: 12px;
+  margin-top: 12px;
 }
 
 /* ===== RESPONSIVO ===== */
