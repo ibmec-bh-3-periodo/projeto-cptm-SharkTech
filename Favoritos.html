@@ -8,38 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    /* Correções específicas */
-    .lista {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-    }
-
-    #favListDinamicos {
-      margin-top: 16px;
-    }
-
-    .card {
-      margin: 0;
-    }
-
-    .remover-fav {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      color: #888;
-      cursor: pointer;
-    }
-
-    .remover-fav:hover {
-      color: #d60000;
-    }
-  </style>
 </head>
 
 <body>
@@ -52,6 +20,7 @@
     <div class="minha-conta"><h3>Favoritos</h3></div>
   </header>
 
+  <!-- MODAL DE ADIÇÃO -->
   <div class="modal-busca-overlay" id="modal-busca" aria-hidden="true">
     <div class="modal-busca">
       <input id="modalSearchInput" type="text" placeholder="Buscar estação, linha ou trajeto">
@@ -60,9 +29,19 @@
     </div>
   </div>
 
+  <!-- MODAL DE REMOÇÃO -->
+  <div class="modal-remover-overlay" id="modal-remover" aria-hidden="true">
+    <div class="modal-remover">  
+      <h3 style="margin-bottom: 12px;">Remover favorito</h3>
+      <div id="modal-remover-carrossel" class="modal-carrossel"></div>
+      <button class="fechar-modal" id="fecharModalRemover">Fechar</button>
+    </div>
+  </div>
+
   <main class="container">
     <section class="busca-box">
       <button id="btnAdd" type="button" class="btn-add">ADICIONAR FAVORITO</button>
+      <button id="btnRemove" type="button" class="btn-remove">×</button>
     </section>
 
     <!-- Lista fixa -->
@@ -121,10 +100,14 @@
 
   <script>
     const btnAdd = document.getElementById('btnAdd');
+    const btnRemove = document.getElementById('btnRemove');
     const modal = document.getElementById('modal-busca');
+    const modalRemover = document.getElementById('modal-remover');
     const fecharModal = document.getElementById('fecharModalBusca');
+    const fecharModalRemover = document.getElementById('fecharModalRemover');
     const modalInput = document.getElementById('modalSearchInput');
     const modalCarrossel = document.getElementById('modal-carrossel');
+    const modalRemoverCarrossel = document.getElementById('modal-remover-carrossel');
     const favListDinamicos = document.getElementById('favListDinamicos');
     const emptyState = document.getElementById('emptyState');
 
@@ -147,9 +130,7 @@
 
     function montarCarrossel(linhas) {
       modalCarrossel.innerHTML = '';
-
       const filtradas = linhas.filter(linha => !linhaJaFavoritada(linha.nome));
-
       if (filtradas.length === 0) {
         modalCarrossel.innerHTML = '<p style="text-align:center; color:#444;">Todas as linhas já foram adicionadas.</p>';
         return;
@@ -187,21 +168,45 @@
             <button class="line-action" style="background-color: ${linha.cor}" title="Abrir">
               <img src="./assets/play_arrow.svg" alt="Abrir">
             </button>
-            <button class="remover-fav" title="Remover favorito">×</button>
           `;
-
-          favorito.querySelector('.remover-fav').addEventListener('click', () => {
-            favorito.remove();
-            syncEmpty();
-            montarCarrossel(linhasDisponiveis);
-          });
-
           favListDinamicos.appendChild(favorito);
           syncEmpty();
           modal.style.display = 'none';
           modalInput.value = '';
           montarCarrossel(linhasDisponiveis);
         });
+      });
+    }
+
+    function montarCarrosselRemover() {
+      modalRemoverCarrossel.innerHTML = '';
+      const favoritos = favListDinamicos.querySelectorAll('.card');
+
+      if (favoritos.length === 0) {
+        modalRemoverCarrossel.innerHTML = '<p style="text-align:center; color:#444;">Nenhum favorito para remover.</p>';
+        return;
+      }
+
+      favoritos.forEach(card => {
+        const nome = card.querySelector('h3')?.textContent.trim();
+        const cor = card.querySelector('.pill')?.style.backgroundColor || '#ccc';
+
+        const item = document.createElement('div');
+        item.className = 'linha-card';
+        item.innerHTML = `
+          <div class="cor-bolinha" style="background-color: ${cor}"></div>
+          <span>${nome}</span>
+        `;
+
+        item.addEventListener('click', () => {
+          card.remove();
+          syncEmpty();
+          modalRemover.style.display = 'none';
+          modalRemoverCarrossel.innerHTML = '';
+          montarCarrossel(linhasDisponiveis);
+        });
+
+        modalRemoverCarrossel.appendChild(item);
       });
     }
 
@@ -212,21 +217,31 @@
       modalInput.focus();
     });
 
+    btnRemove.addEventListener('click', () => {
+      modalRemover.style.display = 'flex';
+      montarCarrosselRemover();
+    });
+
     fecharModal.addEventListener('click', () => {
-      modal.style.display = 'none';
-      modalInput.value = '';
-      modalCarrossel.innerHTML = '';
-    });
+    modal.style.display = 'none';
+    modalInput.value = '';
+    modalCarrossel.innerHTML = '';
+  });
 
-    modalInput.addEventListener('input', () => {
-      const termo = modalInput.value.toLowerCase();
-      const filtradas = linhasDisponiveis.filter(linha =>
-        linha.nome.toLowerCase().includes(termo) && !linhaJaFavoritada(linha.nome)
-      );
-      montarCarrossel(filtradas);
-    });
+  fecharModalRemover.addEventListener('click', () => {
+    modalRemover.style.display = 'none';
+    modalRemoverCarrossel.innerHTML = '';
+  });
 
-    syncEmpty();
-  </script>
+  modalInput.addEventListener('input', () => {
+    const termo = modalInput.value.toLowerCase();
+    const filtradas = linhasDisponiveis.filter(linha =>
+      linha.nome.toLowerCase().includes(termo) && !linhaJaFavoritada(linha.nome)
+    );
+    montarCarrossel(filtradas);
+  });
+
+  syncEmpty();
+</script>
 </body>
 </html>
