@@ -20,14 +20,24 @@
     </div>
     <div class="minha-conta"><h3>Favoritos</h3></div>
   </header>
+  <div class="modal-busca-overlay" id="modal-busca" aria-hidden="true">
+    <div class="modal-busca">
+      <input id="modalSearchInput" type="text" placeholder="Buscar estação, linha ou trajeto">
+      <div id="modal-carrossel" class="modal-carrossel">
+        <!-- Cards serão inseridos via JS -->
+      </div>
+      <button class="fechar-modal" id="fecharModalBusca">Fechar</button>
+    </div>
+  </div>
+  
 
   <!-- BOLHA CINZA -->
   <main class="container">
-    <!-- Busca -->
+  
     <section class="busca-box">
-      <input id="searchInput" type="text" placeholder="Buscar estação, linha ou trajeto" aria-label="Buscar favorito">
-      <button id="btnAdd" type="button" class="btn-add">Adicionar</button>
+      <button id="btnAdd" type="button" class="btn-add">ADICIONAR FAVORITO</button>
     </section>
+    
 
     <!-- Lista -->
     <section id="favList" class="lista">
@@ -84,36 +94,113 @@
   </main>
 
   <script>
-    // Estado vazio e adicionar mock
+    const btnAdd = document.getElementById('btnAdd');
+    const modal = document.getElementById('modal-busca');
+    const fecharModal = document.getElementById('fecharModalBusca');
+    const modalInput = document.getElementById('modalSearchInput');
+    const modalCarrossel = document.getElementById('modal-carrossel');
     const favList = document.getElementById('favList');
     const emptyState = document.getElementById('emptyState');
-    const searchInput = document.getElementById('searchInput');
-    const btnAdd = document.getElementById('btnAdd');
-
-    function syncEmpty() { emptyState.hidden = favList.children.length > 0; }
-    syncEmpty();
-
+  
+    let linhasDisponiveis = [];
+  
+    function syncEmpty() {
+      emptyState.hidden = favList.children.length > 0;
+    }
+  
+    // Carrega o JSON uma vez
+    fetch('./assets/data/linhas.json')
+      .then(res => res.json())
+      .then(linhas => {
+        linhasDisponiveis = linhas;
+      });
+  
+    // Verifica se uma linha já está nos favoritos
+    function linhaJaFavoritada(nome) {
+      const cards = favList.querySelectorAll('.card h3');
+      return Array.from(cards).some(card => card.textContent.trim() === nome);
+    }
+  
+    // Monta os cards no carrossel
+    function montarCarrossel(linhas) {
+      modalCarrossel.innerHTML = '';
+  
+      const filtradas = linhas.filter(linha => !linhaJaFavoritada(linha.nome));
+  
+      if (filtradas.length === 0) {
+        modalCarrossel.innerHTML = '<p style="text-align:center; color:#444;">Todas as linhas já foram adicionadas.</p>';
+        return;
+      }
+  
+      filtradas.forEach(linha => {
+        const card = document.createElement('div');
+        card.className = 'linha-card';
+        card.dataset.nome = linha.nome.toLowerCase();
+  
+        const cor = document.createElement('div');
+        cor.className = 'cor-bolinha';
+        cor.style.backgroundColor = linha.cor;
+  
+        const texto = document.createElement('span');
+        texto.textContent = linha.nome;
+  
+        card.appendChild(cor);
+        card.appendChild(texto);
+        modalCarrossel.appendChild(card);
+  
+        card.addEventListener('click', () => {
+          const favorito = document.createElement('article');
+          favorito.className = 'card';
+          favorito.innerHTML = `
+            <div class="esq">
+              <div class="pill" style="background-color: ${linha.cor}">
+                <img src="./assets/img/train.svg" alt="${linha.nome}">
+              </div>
+              <div class="info">
+                <h3>${linha.nome}</h3>
+                <p>Adicionado agora</p>
+              </div>
+            </div>
+            <button class="line-action" style="background-color: ${linha.cor}" title="Abrir">
+              <img src="./assets/play_arrow.svg" alt="Abrir">
+            </button>
+          `;
+          favList.prepend(favorito);
+          syncEmpty();
+  
+          modal.style.display = 'none';
+          modalInput.value = '';
+          montarCarrossel(linhasDisponiveis); // atualiza o carrossel
+        });
+      });
+    }
+  
+    // Abrir modal
     btnAdd.addEventListener('click', () => {
-      const value = searchInput.value.trim();
-      if (!value) return;
-
-      const card = document.createElement('article');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="esq">
-          <div class="pill generica"><img src="./assets/img/train.svg" alt="Favorito"></div>
-          <div class="info">
-            <h3>${value}</h3>
-            <p>Adicionado agora</p>
-          </div>
-        </div>
-        <button class="line-action generica" title="Abrir">
-          <img src="./assets/play_arrow.svg" alt="Abrir">
-        </button>`;
-      favList.prepend(card);
-      searchInput.value = '';
-      syncEmpty();
+      modal.style.display = 'flex';
+      modalInput.value = '';
+      montarCarrossel(linhasDisponiveis);
+      modalInput.focus();
     });
+  
+    // Fechar modal
+    fecharModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modalInput.value = '';
+      modalCarrossel.innerHTML = '';
+    });
+  
+    // Filtro ao digitar
+    modalInput.addEventListener('input', () => {
+      const termo = modalInput.value.toLowerCase();
+      const filtradas = linhasDisponiveis.filter(linha =>
+        linha.nome.toLowerCase().includes(termo) && !linhaJaFavoritada(linha.nome)
+      );
+      montarCarrossel(filtradas);
+    });
+  
+    syncEmpty();
   </script>
+  
 </body>
 </html>

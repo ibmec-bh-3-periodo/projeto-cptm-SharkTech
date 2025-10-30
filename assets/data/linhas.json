@@ -1,11 +1,5 @@
 [
     {
-      "id": "mapa",
-      "nome": "Mapa da rede",
-      "cor": "#E30000",
-      "tipo": "mapa"
-    },
-    {
       "id": "7",
       "nome": "Linha 7 – Rubi",
       "cor": "#8c2b61",
