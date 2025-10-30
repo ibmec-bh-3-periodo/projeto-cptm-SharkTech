@@ -3,6 +3,8 @@
 
 html, body {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   font-family: 'Inter', sans-serif;
   background: #d60000;
   overscroll-behavior: contain;
@@ -45,14 +47,15 @@ html, body {
 
 /* ===== CONTAINER ===== */
 .container {
-  background-color: #E0E0E0;
+  width: 100%;
+  margin: 0;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-  margin-top: -16px;
+  background-color: #E0E0E0;
   padding: 20px 16px 32px;
-  max-width: 420px;
-  margin-left: auto;
-  margin-right: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== SALDO ===== */
@@ -120,12 +123,17 @@ html, body {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 360px;
+  margin: 0 auto;
   position: relative;
   height: auto;
 }
 
 .card .info { max-width: 80%; }
-.card h3 { margin: 0 0 4px; font-size: 20px; font-weight: 500; }
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 500;
+}
 .card p { font-size: 16px; color: #444; font-weight: 400; }
 
 .card .icon {
@@ -205,7 +213,11 @@ html, body {
   margin-bottom: 12px;
 }
 
-.botoes-rapidos { display: flex; gap: 8px; margin-bottom: 12px; }
+.botoes-rapidos {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
 .botoes-rapidos button {
   flex: 1;
   padding: 10px 0;
@@ -218,7 +230,11 @@ html, body {
 }
 .botoes-rapidos button:hover { background: #d0d0d0; }
 
-.modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
 .modal-actions button {
   flex: 1;
   padding: 12px 0;
@@ -233,7 +249,11 @@ html, body {
 .confirmar:hover { background: #0c6f24; }
 .cancelar:hover  { background: #c62828; }
 
-.msg-erro { color: #D71920; min-height: 1em; font-size: 14px; }
+.msg-erro {
+  color: #D71920;
+  min-height: 1em;
+  font-size: 14px;
+}
 
 /* ===== TOAST ===== */
 .toast {
@@ -263,4 +283,9 @@ html, body {
 /* ===== RESPONSIVO ===== */
 @media (min-width: 700px) {
   .minha-conta h3 { font-size: 28px; }
+  .container {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
