@@ -8,10 +8,41 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Correções específicas */
+    .lista {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #favListDinamicos {
+      margin-top: 16px;
+    }
+
+    .card {
+      margin: 0;
+    }
+
+    .remover-fav {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .remover-fav:hover {
+      color: #d60000;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- HEADER (mesmo padrão da tela de saldo) -->
   <header class="header">
     <div class="top-row">
       <a class="link-back" href="home.html"><button class="back-button">←</button></a>
@@ -20,28 +51,22 @@
     </div>
     <div class="minha-conta"><h3>Favoritos</h3></div>
   </header>
+
   <div class="modal-busca-overlay" id="modal-busca" aria-hidden="true">
     <div class="modal-busca">
       <input id="modalSearchInput" type="text" placeholder="Buscar estação, linha ou trajeto">
-      <div id="modal-carrossel" class="modal-carrossel">
-        <!-- Cards serão inseridos via JS -->
-      </div>
+      <div id="modal-carrossel" class="modal-carrossel"></div>
       <button class="fechar-modal" id="fecharModalBusca">Fechar</button>
     </div>
   </div>
-  
 
-  <!-- BOLHA CINZA -->
   <main class="container">
-  
     <section class="busca-box">
       <button id="btnAdd" type="button" class="btn-add">ADICIONAR FAVORITO</button>
     </section>
-    
 
-    <!-- Lista -->
+    <!-- Lista fixa -->
     <section id="favList" class="lista">
-      <!-- Mapa da rede -->
       <article class="card">
         <div class="esq">
           <div class="pill mapa">
@@ -57,7 +82,6 @@
         </button>
       </article>
 
-      <!-- Linha 7 -->
       <article class="card">
         <div class="esq">
           <div class="pill rubi">
@@ -73,7 +97,6 @@
         </button>
       </article>
 
-      <!-- Linha 10 -->
       <article class="card">
         <div class="esq">
           <div class="pill turquesa">
@@ -90,6 +113,9 @@
       </article>
     </section>
 
+    <!-- Lista dinâmica -->
+    <section id="favListDinamicos" class="lista"></section>
+
     <div id="emptyState" class="empty" hidden>Nenhum favorito ainda.</div>
   </main>
 
@@ -99,55 +125,52 @@
     const fecharModal = document.getElementById('fecharModalBusca');
     const modalInput = document.getElementById('modalSearchInput');
     const modalCarrossel = document.getElementById('modal-carrossel');
-    const favList = document.getElementById('favList');
+    const favListDinamicos = document.getElementById('favListDinamicos');
     const emptyState = document.getElementById('emptyState');
-  
+
     let linhasDisponiveis = [];
-  
+
     function syncEmpty() {
-      emptyState.hidden = favList.children.length > 0;
+      emptyState.hidden = favListDinamicos.children.length > 0;
     }
-  
-    // Carrega o JSON uma vez
+
     fetch('./assets/data/linhas.json')
       .then(res => res.json())
       .then(linhas => {
         linhasDisponiveis = linhas;
       });
-  
-    // Verifica se uma linha já está nos favoritos
+
     function linhaJaFavoritada(nome) {
-      const cards = favList.querySelectorAll('.card h3');
+      const cards = document.querySelectorAll('.card h3');
       return Array.from(cards).some(card => card.textContent.trim() === nome);
     }
-  
-    // Monta os cards no carrossel
+
     function montarCarrossel(linhas) {
       modalCarrossel.innerHTML = '';
-  
+
       const filtradas = linhas.filter(linha => !linhaJaFavoritada(linha.nome));
-  
+
       if (filtradas.length === 0) {
         modalCarrossel.innerHTML = '<p style="text-align:center; color:#444;">Todas as linhas já foram adicionadas.</p>';
         return;
       }
-  
+
       filtradas.forEach(linha => {
         const card = document.createElement('div');
         card.className = 'linha-card';
         card.dataset.nome = linha.nome.toLowerCase();
-  
+
         const cor = document.createElement('div');
         cor.className = 'cor-bolinha';
         cor.style.backgroundColor = linha.cor;
-  
+
         const texto = document.createElement('span');
         texto.textContent = linha.nome;
-  
+
         card.appendChild(cor);
         card.appendChild(texto);
         modalCarrossel.appendChild(card);
-  
+
         card.addEventListener('click', () => {
           const favorito = document.createElement('article');
           favorito.className = 'card';
@@ -164,33 +187,37 @@
             <button class="line-action" style="background-color: ${linha.cor}" title="Abrir">
               <img src="./assets/play_arrow.svg" alt="Abrir">
             </button>
+            <button class="remover-fav" title="Remover favorito">×</button>
           `;
-          favList.prepend(favorito);
+
+          favorito.querySelector('.remover-fav').addEventListener('click', () => {
+            favorito.remove();
+            syncEmpty();
+            montarCarrossel(linhasDisponiveis);
+          });
+
+          favListDinamicos.appendChild(favorito);
           syncEmpty();
-  
           modal.style.display = 'none';
           modalInput.value = '';
-          montarCarrossel(linhasDisponiveis); // atualiza o carrossel
+          montarCarrossel(linhasDisponiveis);
         });
       });
     }
-  
-    // Abrir modal
+
     btnAdd.addEventListener('click', () => {
       modal.style.display = 'flex';
       modalInput.value = '';
       montarCarrossel(linhasDisponiveis);
       modalInput.focus();
     });
-  
-    // Fechar modal
+
     fecharModal.addEventListener('click', () => {
       modal.style.display = 'none';
       modalInput.value = '';
       modalCarrossel.innerHTML = '';
     });
-  
-    // Filtro ao digitar
+
     modalInput.addEventListener('input', () => {
       const termo = modalInput.value.toLowerCase();
       const filtradas = linhasDisponiveis.filter(linha =>
@@ -198,9 +225,8 @@
       );
       montarCarrossel(filtradas);
     });
-  
+
     syncEmpty();
   </script>
-  
 </body>
 </html>
