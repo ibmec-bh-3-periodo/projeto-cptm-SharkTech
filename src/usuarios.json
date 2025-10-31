@@ -4,7 +4,7 @@
     "username": "Henrique",
     "email": "henrique@email.com",
     "password": "hashed_password_123",
-    "saldo": 162,
+    "saldo": 187,
     "historico": [
       {
         "data": "2024-10-01T10:15:30Z",
@@ -40,6 +40,16 @@
         "data": "2025-10-31T13:36:18.832Z",
         "descricao": "Recarga de saldo (+R$ 20.00)",
         "valor": 20
+      },
+      {
+        "data": "2025-10-31T13:36:40.077Z",
+        "descricao": "Recarga de saldo (+R$ 20.00)",
+        "valor": 20
+      },
+      {
+        "data": "2025-10-31T13:36:42.223Z",
+        "descricao": "Recarga de saldo (+R$ 5.00)",
+        "valor": 5
       }
     ]
   },
