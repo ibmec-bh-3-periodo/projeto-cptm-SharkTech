@@ -40,6 +40,12 @@
       color: #333;
     }
 
+    .modal p {
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
     .modal label {
       display: block;
       margin-top: 10px;
@@ -100,7 +106,6 @@
       flex: 1;
     }
 
-    /* ===== Botão dentro do card ===== */
     .btn-card {
       background-color: #d60000;
       color: #fff;
@@ -114,18 +119,13 @@
     }
 
     .btn-card:hover {
-      background-color: #d60000;
+      background-color: #b00000;
     }
 
-    /* ===== Ajuste específico para o card de gerar bilhetes ===== */
     .card.gerar-bilhetes {
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-
-    .card.gerar-bilhetes .info {
-      flex: 1;
     }
 
     .card.gerar-bilhetes .right-content {
@@ -134,6 +134,39 @@
       gap: 10px;
     }
 
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      visibility: hidden;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      min-width: 280px;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.4s ease, bottom 0.4s ease;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+      bottom: 50px;
+    }
+
+    .toast.success {
+      background-color: #28a745;
+    }
+
+    .toast.error {
+      background-color: #dc3545;
+    }
   </style>
 </head>
 
@@ -173,7 +206,7 @@
       <div class="card gerar-bilhetes">
         <div class="info">
           <h3>Gerar Bilhetes</h3>
-          <p>Escolha o trajeto, pague pelo app e embarque com agilidade.</p>
+          <p>Escolha a quantidade de bilhetes que deseja comprar.</p>
         </div>
         <div class="right-content">
           <button class="btn-card" id="abrir-modal">Gerar Bilhete</button>
@@ -199,32 +232,32 @@
   <div class="modal-overlay" id="modal">
     <div class="modal">
       <h2>Gerar Bilhete</h2>
-      <label for="saida">Estação de Saída:</label>
-      <select id="saida">
-        <option value="">Selecione</option>
-        <option>Luz</option>
-        <option>Brás</option>
-        <option>Tatuapé</option>
-        <option>Barra Funda</option>
-        <option>Osasco</option>
-      </select>
+      <p>Cada bilhete custa <strong>R$ 5,00</strong></p>
 
-      <label for="chegada">Estação de Chegada:</label>
-      <select id="chegada">
+      <label for="quantidade">Quantidade de bilhetes:</label>
+      <select id="quantidade">
         <option value="">Selecione</option>
-        <option>Luz</option>
-        <option>Brás</option>
-        <option>Tatuapé</option>
-        <option>Barra Funda</option>
-        <option>Osasco</option>
+        <option value="1">1 bilhete</option>
+        <option value="2">2 bilhetes</option>
+        <option value="3">3 bilhetes</option>
+        <option value="4">4 bilhetes</option>
+        <option value="5">5 bilhetes</option>
+        <option value="6">6 bilhetes</option>
+        <option value="7">7 bilhetes</option>
+        <option value="8">8 bilhetes</option>
+        <option value="9">9 bilhetes</option>
+        <option value="10">10 bilhetes</option>
       </select>
 
       <div class="modal-buttons">
-        <button class="btn-gerar" id="gerar-bilhete">Gerar</button>
         <button class="btn-cancelar" id="fechar-modal">Cancelar</button>
+        <button class="btn-gerar" id="gerar-bilhete">Gerar</button>
       </div>
     </div>
   </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast"></div>
 
   <script>
     // Toggle de visibilidade do saldo
@@ -232,10 +265,15 @@
     const iconeOlho = document.getElementById('icone-olho');
     const toggleBtn = document.getElementById('toggle-saldo');
     let saldoVisivel = true;
+    let saldoAtual = 14.70; // saldo inicial
+
+    function atualizarSaldoDisplay() {
+      valorSaldo.textContent = saldoVisivel ? `R$ ${saldoAtual.toFixed(2).replace('.', ',')}` : '••••';
+    }
 
     toggleBtn.addEventListener('click', () => {
       saldoVisivel = !saldoVisivel;
-      valorSaldo.textContent = saldoVisivel ? 'R$ 14,70' : '••••';
+      atualizarSaldoDisplay();
       iconeOlho.src = saldoVisivel ? './assets/img/eye-off.svg' : './assets/img/eye.svg';
     });
 
@@ -244,6 +282,8 @@
     const fecharModal = document.getElementById('fechar-modal');
     const gerarBilhete = document.getElementById('gerar-bilhete');
     const modal = document.getElementById('modal');
+    const selectQuantidade = document.getElementById('quantidade');
+    const toast = document.getElementById('toast');
 
     abrirModal.addEventListener('click', () => {
       modal.style.display = 'flex';
@@ -253,11 +293,35 @@
       modal.style.display = 'none';
     });
 
+    // Função Toast
+    function mostrarToast(mensagem, tipo = "warning") {
+      toast.textContent = mensagem;
+      toast.className = `toast show ${tipo}`;
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+
     gerarBilhete.addEventListener('click', () => {
+      const qtd = parseInt(selectQuantidade.value);
+      if (isNaN(qtd) || qtd <= 0) {
+        mostrarToast('Selecione a quantidade de bilhetes.', 'error');
+        return;
+      }
+
+      const custoTotal = qtd * 5;
+
+      if (saldoAtual >= custoTotal) {
+        saldoAtual -= custoTotal;
+        atualizarSaldoDisplay();
+        mostrarToast(`Você gerou ${qtd} bilhete(s) por R$ ${custoTotal.toFixed(2).replace('.', ',')}.`, 'success');
+      } else {
+        mostrarToast('Saldo insuficiente para essa operação.', 'error');
+      }
+
       modal.style.display = 'none';
     });
 
-    // Fechar modal clicando fora dele
     window.addEventListener('click', (e) => {
       if (e.target === modal) {
         modal.style.display = 'none';
