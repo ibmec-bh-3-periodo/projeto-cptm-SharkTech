@@ -37,5 +37,5 @@ mapa.addEventListener("click", () => {
 
 function abrirFaleConosco() {
   const url = "http://localhost:5001/fale-conosco";
-  window.location.href = url;
+  window.open(url, "_blank");
 }
